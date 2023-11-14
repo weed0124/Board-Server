@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .form-control {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.board}">게시판 상세</h2>
+    </div>
+
+    <div>
+        <label for="boardId" th:text="#{label.board.id}">게시글 ID</label>
+        <input type="text" id="boardId" name="boardId" class="form-control" value="1" th:value="${board.id}" readonly>
+    </div>
+    <div>
+        <label for="title" th:text="#{label.board.title}">게시글 제목</label>
+        <input type="text" id="title" name="title" class="form-control" value="제목" th:value="${board.title}" readonly>
+    </div>
+    <div>
+        <label for="writer" th:text="#{label.board.writer}">게시글 작성자</label>
+        <input type="text" id="writer" name="writer" class="form-control" value="작성자" th:value="${board.writer}" readonly>
+    </div>
+    <div>
+        <label for="registDate" th:text="#{label.board.registDate}">게시글 작성일</label>
+        <input type="text" id="registDate" name="registDate" class="form-control" value="2023/11/14" th:value="${#dates.format(board.registDate, 'yyyy.MM.dd HH:mm:ss')}" readonly>
+    </div>
+    <div>
+        <label for="readCount" th:text="#{label.board.readCount}">게시글 조회수</label>
+        <input type="text" id="readCount" name="readCount" class="form-control" value="1" th:value="${board.readCount}" readonly>
+    </div>
+    <div>
+        <label for="recommendCount" th:text="#{label.board.recommendCount}">게시글 추천수</label>
+        <input type="text" id="recommendCount" name="recommendCount" class="form-control" value="1" th:value="${board.recommendCount}" readonly>
+    </div>
+    <div>
+        <textarea id="content" name="content" class="form-control" value="aa" th:value="${board.content}" th:text="${board.content}" readonly></textarea>
+    </div>
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    onclick="location.href='editForm.html'"
+                    th:onclick="|location.href='@{/board/{boardId}/edit(boardId=${board.id})}'|"
+                    type="button" th:text="#{page.updateBoard}">게시글 수정</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='boards.html'"
+                    th:onclick="|location.href='@{/board}'|"
+                    type="button" th:text="#{button.cancel}">목록으로</button>
+        </div>
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../../static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.boards}">게시판 목록</h2>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    onclick="location.href='addForm.html'"
+                    th:onclick="|location.href='@{/board/add}'|"
+                    type="button" th:text="#{page.addBoard}">게시글 등록</button>
+        </div>
+    </div>
+
+    <hr class="my-4">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="#{label.board.id}">번호</th>
+                <th th:text="#{label.board.title}">제목</th>
+                <th th:text="#{label.board.writer}">쓰니</th>
+                <th th:text="#{label.board.registDate}">작성일자</th>
+                <th th:text="#{label.board.readCount}">조회수</th>
+                <th th:text="#{label.board.recommendCount}">추천수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board : ${boards}">
+                <td th:text="${board.id}">번호</td>
+                <td><a href="board.html" th:href="@{|/board/${board.id}|}" th:text="${board.title}">제목</a></td>
+                <td th:text="${board.writer}">글쓴이</td>
+                <td th:if="|${#dates.format(board.registDate, 'yyyyMMdd')} == ${#calendars.format(#calendars.createNow(), 'yyyyMMdd')}|" th:text="${#dates.format(board.registDate, 'HH:mm')}">11:30</td>
+                <td th:unless="|${#dates.format(board.registDate, 'yyyyMMdd')} == ${#calendars.format(#calendars.createNow(), 'yyyyMMdd')}|" th:text="${#dates.format(board.registDate, 'yy/MM/dd')}">23/11/14</td>
+                <td th:text="${board.readCount}">0</td>
+                <td th:text="${board.recommendCount}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div> <!-- /container -->
+
+</body>
+</html>
