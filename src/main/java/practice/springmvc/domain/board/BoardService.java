@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import practice.springmvc.domain.member.Member;
 import practice.springmvc.domain.member.MemberRepository;
 
 @Slf4j
