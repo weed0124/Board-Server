@@ -41,7 +41,6 @@ public class BoardController {
     public String addForm(Model model) {
         Board board = new Board();
         board.setMember(new Member(ms.getMessage("board.default.writer", null, null)));
-//        board.setWriter(ms.getMessage("board.default.writer", null, null));
         model.addAttribute("board", board);
         return "boards/addForm";
     }
@@ -53,11 +52,6 @@ public class BoardController {
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
         board.setMember(new Member(form.getMember().getNickname(), form.getMember().getPassword(), boardService.getRemoteIp(request)));
-        /*
-        board.setWriter(form.getWriter());
-        board.setPassword(form.getPassword());
-        board.setIp(boardService.getRemoteIp(request));
-        */
         board.setRegistDate(new Date());
         board.setUpdateDate(new Date());
 

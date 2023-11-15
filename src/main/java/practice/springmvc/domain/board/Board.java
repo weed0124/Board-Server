@@ -12,13 +12,7 @@ public class Board {
     private Long id;
     private String title;
     private String content;
-
     private Member member;
-    /*
-    private String writer;
-    private String password;
-    private String ip;
-    */
     private Date registDate;
     private Date updateDate;
     private int readCount;

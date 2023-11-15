@@ -22,11 +22,6 @@ public class BoardService {
             board.setReadCount(board.getReadCount() + 1);
         }
 
-        /*
-        if (!board.getIp().equals(remoteIp)) {
-            board.setReadCount(board.getReadCount() + 1);
-        }
-        */
         return board;
     }
 

@@ -2,7 +2,6 @@ package practice.springmvc.domain.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import practice.springmvc.domain.board.Board;
 
 import java.util.Map;
 import java.util.UUID;
