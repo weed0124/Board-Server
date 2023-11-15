@@ -1,5 +1,6 @@
 package practice.springmvc.web.board;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardRepository;
+import practice.springmvc.domain.board.BoardService;
+import practice.springmvc.domain.member.Member;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
 
@@ -24,6 +27,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardRepository boardRepository;
+    private final BoardService boardService;
     private final MessageSource ms;
 
     @GetMapping
@@ -36,18 +40,24 @@ public class BoardController {
     @GetMapping("/add")
     public String addForm(Model model) {
         Board board = new Board();
-        board.setWriter(ms.getMessage("board.default.writer", null, null));
+        board.setMember(new Member(ms.getMessage("board.default.writer", null, null)));
+//        board.setWriter(ms.getMessage("board.default.writer", null, null));
         model.addAttribute("board", board);
         return "boards/addForm";
     }
 
     @PostMapping("/add")
-    public String saveForm(BoardSaveForm form) {
+    public String saveForm(BoardSaveForm form, HttpServletRequest request) {
+        log.info("form={}", form);
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
+        board.setMember(new Member(form.getMember().getNickname(), form.getMember().getPassword(), boardService.getRemoteIp(request)));
+        /*
         board.setWriter(form.getWriter());
         board.setPassword(form.getPassword());
+        board.setIp(boardService.getRemoteIp(request));
+        */
         board.setRegistDate(new Date());
         board.setUpdateDate(new Date());
 
@@ -56,9 +66,11 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public String read(@PathVariable Long boardId, Model model) {
+    public String read(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardRepository.findById(boardId);
-        model.addAttribute("board", findBoard);
+        String requestIp = boardService.getRemoteIp(request);
+        model.addAttribute("board", boardService.addReadCount(findBoard, request));
+
         return "boards/board";
     }
 
@@ -74,7 +86,7 @@ public class BoardController {
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-        board.setWriter(form.getWriter());
+//        board.setWriter(form.getWriter());
         board.setUpdateDate(new Date());
 
         boardRepository.update(boardId, board);

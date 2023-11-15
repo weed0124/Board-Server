@@ -1,6 +1,7 @@
 package practice.springmvc.domain.board;
 
 import org.springframework.stereotype.Repository;
+import practice.springmvc.domain.member.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,9 +31,11 @@ public class BoardRepository {
 
     public void update(Long boardId, Board updateParam) {
         Board findBoard = findById(boardId);
-        findBoard.setPassword(updateParam.getPassword());
         findBoard.setTitle(updateParam.getTitle());
+        /*
         findBoard.setWriter(updateParam.getWriter());
+        findBoard.setPassword(updateParam.getPassword());
+        */
         findBoard.setContent(updateParam.getContent());
         findBoard.setUpdateDate(new Date());
     }

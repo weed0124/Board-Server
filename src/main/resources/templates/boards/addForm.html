@@ -32,11 +32,11 @@
             <input type="text" id="title" th:field="*{title}"
                    class="form-control" placeholder="제목을 입력하세요">
         </div>
-        <div id="aaaa">
-            <input type="text" id="writer" th:field="*{writer}" class="form-control">
+        <div>
+            <input type="text" id="nickname" th:field="*{member.nickname}" class="form-control">
         </div>
         <div>
-            <input type="password" id="password" th:field="*{password}" class="form-control">
+            <input type="password" id="password" th:field="*{member.password}" class="form-control">
         </div>
         <div>
             <textarea cols="50" rows="10" id="content" th:field="*{content}" class="form-control"></textarea>
