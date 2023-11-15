@@ -30,8 +30,8 @@
         <input type="text" id="title" name="title" class="form-control" value="제목" th:value="${board.title}" readonly>
     </div>
     <div>
-        <label for="writer" th:text="#{label.board.writer}">게시글 작성자</label>
-        <input type="text" id="writer" name="writer" class="form-control" value="작성자" th:value="${board.writer}" readonly>
+        <label for="nickname" th:text="#{label.board.writer}">게시글 작성자</label>
+        <input type="text" id="nickname" name="nickname" class="form-control" value="작성자" th:value="${board.member.nickname}" readonly>
     </div>
     <div>
         <label for="registDate" th:text="#{label.board.registDate}">게시글 작성일</label>
