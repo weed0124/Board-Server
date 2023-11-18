@@ -32,6 +32,7 @@
                 <th th:text="#{label.board.registDate}">작성일자</th>
                 <th th:text="#{label.board.readCount}">조회수</th>
                 <th th:text="#{label.board.recommendCount}">추천수</th>
+                <th th:text="#{label.board.notRecommendCount}">비추천수</th>
             </tr>
             </thead>
             <tbody>
@@ -43,6 +44,7 @@
                 <td th:unless="|${#dates.format(board.registDate, 'yyyyMMdd')} == ${#calendars.format(#calendars.createNow(), 'yyyyMMdd')}|" th:text="${#dates.format(board.registDate, 'yy/MM/dd')}">23/11/14</td>
                 <td th:text="${board.readCount}">0</td>
                 <td th:text="${board.recommendCount}">0</td>
+                <td th:text="${board.notRecommendCount}">0</td>
             </tr>
             </tbody>
         </table>

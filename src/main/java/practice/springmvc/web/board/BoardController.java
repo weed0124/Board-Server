@@ -73,9 +73,22 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public String read(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardRepository.findById(boardId);
-        String requestIp = boardService.getRemoteIp(request);
         model.addAttribute("board", boardService.addReadCount(findBoard, request));
 
+        return "boards/board";
+    }
+
+    @GetMapping("/{boardId}/recommend")
+    public String recommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
+        Board findBoard = boardRepository.findById(boardId);
+        model.addAttribute("board", boardService.recommend(findBoard, request));
+        return "boards/board";
+    }
+
+    @GetMapping("/{boardId}/notrecommend")
+    public String notRecommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
+        Board findBoard = boardRepository.findById(boardId);
+        model.addAttribute("board", boardService.notRecommend(findBoard, request));
         return "boards/board";
     }
 

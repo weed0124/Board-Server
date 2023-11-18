@@ -16,12 +16,37 @@ public class BoardService {
 
     // 작성자 IP와 같지 않은 경우 조회수 증가
     public Board addReadCount(Board board, HttpServletRequest request) {
-        String remoteIp = getRemoteIp(request);
-        if (!board.getMember().getIp().equals(remoteIp)) {
+        boolean ownIp = isOwnIp(board, request);
+        if (!ownIp) {
             board.setReadCount(board.getReadCount() + 1);
         }
 
         return board;
+    }
+
+    // 작성자 IP와 같지 않은 경우 추천수 증가
+    public Board recommend(Board board, HttpServletRequest request) {
+        boolean ownIp = isOwnIp(board, request);
+        if (!ownIp) {
+            board.setRecommendCount(board.getRecommendCount() + 1);
+        }
+
+        return board;
+    }
+
+    // 작성자 IP와 같지 않은 경우 비추천수 증가
+    public Board notRecommend(Board board, HttpServletRequest request) {
+        boolean ownIp = isOwnIp(board, request);
+        if (!ownIp) {
+            board.setNotRecommendCount(board.getNotRecommendCount() + 1);
+        }
+
+        return board;
+    }
+
+    private boolean isOwnIp(Board board, HttpServletRequest request) {
+        String remoteIp = getRemoteIp(request);
+        return board.getMember().getIp().equals(remoteIp);
     }
 
     // IP 조회

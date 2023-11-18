@@ -1,6 +1,5 @@
 package practice.springmvc.domain.board;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import practice.springmvc.domain.member.Member;
@@ -19,6 +18,7 @@ public class Board {
     private Date updateDate;
     private int readCount;
     private int recommendCount;
+    private int notRecommendCount;
     private List<Comment> comments;
 
     public Board() {
