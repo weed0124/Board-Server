@@ -14,10 +14,6 @@ public class Member {
     public Member() {
     }
 
-    public Member(String nickname) {
-        this.nickname = nickname;
-    }
-
     public Member(String nickname, String password) {
         this.nickname = nickname;
         this.password = password;

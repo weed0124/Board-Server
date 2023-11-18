@@ -6,10 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardRepository;
 import practice.springmvc.domain.board.BoardService;
@@ -40,13 +39,25 @@ public class BoardController {
     @GetMapping("/add")
     public String addForm(Model model) {
         Board board = new Board();
-        board.setMember(new Member(ms.getMessage("board.default.writer", null, null)));
+        Member member = new Member();
+        member.setNickname(ms.getMessage("board.default.writer", null, null));
+        board.setMember(member);
         model.addAttribute("board", board);
         return "boards/addForm";
     }
 
     @PostMapping("/add")
-    public String saveForm(BoardSaveForm form, HttpServletRequest request) {
+    public String saveForm(@Validated @ModelAttribute("board") BoardSaveForm form, HttpServletRequest request, BindingResult bindingResult) {
+        String password = form.getMember().getPassword();
+        if (password.length() < 4 || password.length() > 12) {
+            bindingResult.reject("password.size", new Object[]{4, 12}, null);
+        }
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            return "boards/addForm";
+        }
+
         log.info("form={}", form);
         Board board = new Board();
         board.setTitle(form.getTitle());
@@ -76,7 +87,18 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/edit")
-    public String edit(@PathVariable Long boardId, BoardUpdateForm form) {
+    public String edit(@PathVariable Long boardId, @ModelAttribute("board") BoardUpdateForm form, BindingResult bindingResult) {
+        String passParam = form.getMember().getPassword();
+        String findPassword = boardRepository.findById(boardId).getMember().getPassword();
+        if (!findPassword.equals(passParam)) {
+            bindingResult.reject("loginFail", "비밀번호가 맞지 않습니다.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            return "boards/editForm";
+        }
+
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());

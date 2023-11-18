@@ -21,4 +21,8 @@ public class MemberRepository {
     public Member findById(String id) {
         return store.get(id);
     }
+
+    public void clearStore() {
+        store.clear();
+    }
 }
