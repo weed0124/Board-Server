@@ -14,6 +14,7 @@ import practice.springmvc.domain.member.MemberRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -40,14 +41,9 @@ public class BoardService {
         if (!ownIp) {
             Recommend recommend = new Recommend(board.getId(), board.getMember(), LocalDate.now());
             recommendRepository.save(recommend);
-            List<Recommend> list = board.getRecommends();
-            if (list != null) {
-                list.add(recommend);
-            } else {
-                ArrayList<Recommend> recommends = new ArrayList<>();
-                recommends.add(recommend);
-                board.setRecommends(recommends);
-            }
+            List<Recommend> recommends = Optional.ofNullable(board.getRecommends()).orElseGet(() -> new ArrayList<>());
+            recommends.add(recommend);
+            board.setRecommends(recommends);
         }
         return board;
     }
@@ -58,14 +54,9 @@ public class BoardService {
         if (!ownIp) {
             NotRecommend notRecommend = new NotRecommend(board.getId(), board.getMember(), LocalDate.now());
             notRecommendRepository.save(notRecommend);
-            List<NotRecommend> list = board.getNotRecommends();
-            if (list != null) {
-                list.add(notRecommend);
-            } else {
-                ArrayList<NotRecommend> notRecommends = new ArrayList<>();
-                notRecommends.add(notRecommend);
-                board.setNotRecommends(notRecommends);
-            }
+            List<NotRecommend> notRecommends = Optional.ofNullable(board.getNotRecommends()).orElseGet(() -> new ArrayList<>());
+            notRecommends.add(notRecommend);
+            board.setNotRecommends(notRecommends);
         }
 
         return board;
@@ -81,18 +72,11 @@ public class BoardService {
         String ip = request.getHeader("X-FORWARDED-FOR");
 
         //proxy 환경일 경우
-        if (ip == null || ip.length() == 0) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-
+        ip = Optional.ofNullable(ip).orElseGet(() -> request.getHeader("Proxy-Client-IP"));
         //웹로직 서버일 경우
-        if (ip == null || ip.length() == 0) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
+        ip = Optional.ofNullable(ip).orElseGet(() -> request.getHeader("WL-Proxy-Client-IP"));
 
-        if (ip == null || ip.length() == 0) {
-            ip = request.getRemoteAddr() ;
-        }
+        ip = Optional.ofNullable(ip).orElseGet(() -> request.getRemoteAddr());
 
         return ip;
     }
