@@ -5,7 +5,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import practice.springmvc.domain.board.notrecommend.NotRecommend;
+import practice.springmvc.domain.board.notrecommend.NotRecommendRepository;
+import practice.springmvc.domain.board.recommend.Recommend;
+import practice.springmvc.domain.board.recommend.RecommendRepository;
 import practice.springmvc.domain.member.MemberRepository;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -13,6 +21,8 @@ import practice.springmvc.domain.member.MemberRepository;
 public class BoardService {
 
     private final MemberRepository memberRepository;
+    private final RecommendRepository recommendRepository;
+    private final NotRecommendRepository notRecommendRepository;
 
     // 작성자 IP와 같지 않은 경우 조회수 증가
     public Board addReadCount(Board board, HttpServletRequest request) {
@@ -28,9 +38,17 @@ public class BoardService {
     public Board recommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
-            board.setRecommendCount(board.getRecommendCount() + 1);
+            Recommend recommend = new Recommend(board.getId(), board.getMember(), LocalDate.now());
+            recommendRepository.save(recommend);
+            List<Recommend> list = board.getRecommends();
+            if (list != null) {
+                list.add(recommend);
+            } else {
+                ArrayList<Recommend> recommends = new ArrayList<>();
+                recommends.add(recommend);
+                board.setRecommends(recommends);
+            }
         }
-
         return board;
     }
 
@@ -38,7 +56,16 @@ public class BoardService {
     public Board notRecommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
-            board.setNotRecommendCount(board.getNotRecommendCount() + 1);
+            NotRecommend notRecommend = new NotRecommend(board.getId(), board.getMember(), LocalDate.now());
+            notRecommendRepository.save(notRecommend);
+            List<NotRecommend> list = board.getNotRecommends();
+            if (list != null) {
+                list.add(notRecommend);
+            } else {
+                ArrayList<NotRecommend> notRecommends = new ArrayList<>();
+                notRecommends.add(notRecommend);
+                board.setNotRecommends(notRecommends);
+            }
         }
 
         return board;

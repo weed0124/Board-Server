@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardRepository;
 import practice.springmvc.domain.board.BoardService;
+import practice.springmvc.domain.board.notrecommend.NotRecommend;
+import practice.springmvc.domain.board.notrecommend.NotRecommendRepository;
+import practice.springmvc.domain.board.recommend.Recommend;
+import practice.springmvc.domain.board.recommend.RecommendRepository;
 import practice.springmvc.domain.member.Member;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
@@ -26,6 +30,8 @@ import java.util.List;
 public class BoardController {
 
     private final BoardRepository boardRepository;
+    private final RecommendRepository recommendRepository;
+    private final NotRecommendRepository notRecommendRepository;
     private final BoardService boardService;
     private final MessageSource ms;
 
@@ -81,14 +87,24 @@ public class BoardController {
     @GetMapping("/{boardId}/recommend")
     public String recommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardRepository.findById(boardId);
-        model.addAttribute("board", boardService.recommend(findBoard, request));
+        List<Recommend> findRecommends = recommendRepository.findByBoardId(findBoard.getId());
+        if (findRecommends.size() == 0) {
+            model.addAttribute("board", boardService.recommend(findBoard, request));
+        } else {
+            model.addAttribute("board", findBoard);
+        }
         return "boards/board";
     }
 
     @GetMapping("/{boardId}/notrecommend")
     public String notRecommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardRepository.findById(boardId);
-        model.addAttribute("board", boardService.notRecommend(findBoard, request));
+        List<NotRecommend> findNotRecommends = notRecommendRepository.findByBoardId(findBoard.getId());
+        if (findNotRecommends.size() == 0) {
+            model.addAttribute("board", boardService.notRecommend(findBoard, request));
+        } else {
+            model.addAttribute("board", findBoard);
+        }
         return "boards/board";
     }
 

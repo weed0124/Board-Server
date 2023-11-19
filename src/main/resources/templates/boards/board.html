@@ -42,12 +42,12 @@
         <input type="text" id="readCount" name="readCount" class="form-control" value="1" th:value="${board.readCount}" readonly>
     </div>
     <div>
-        <label for="recommendCount" th:text="#{label.board.recommendCount}">게시글 추천수</label>
-        <input type="text" id="recommendCount" name="recommendCount" class="form-control" value="1" th:value="${board.recommendCount}" readonly>
+        <label for="recommends" th:text="#{label.board.recommendCount}">게시글 추천수</label>
+        <input type="text" id="recommends" name="recommends" class="form-control" value="1" th:value="${board.recommendsSize()}" readonly>
     </div>
     <div>
-        <label for="notRecommendCount" th:text="#{label.board.notRecommendCount}">게시글 비추천수</label>
-        <input type="text" id="notRecommendCount" name="notRecommendCount" class="form-control" value="1" th:value="${board.notRecommendCount}" readonly>
+        <label for="notRecommends" th:text="#{label.board.notRecommendCount}">게시글 비추천수</label>
+        <input type="text" id="notRecommends" name="notRecommends" class="form-control" value="1" th:value="${board.notRecommendsSize()}" readonly>
     </div>
     <div>
         <textarea id="content" name="content" class="form-control" value="aa" th:value="${board.content}" th:text="${board.content}" readonly></textarea>
