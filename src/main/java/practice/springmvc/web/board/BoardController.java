@@ -64,7 +64,6 @@ public class BoardController {
             return "boards/addForm";
         }
 
-        log.info("form={}", form);
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
