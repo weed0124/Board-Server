@@ -7,6 +7,8 @@
 > Thymeleaf
 > 
 > Lombok
+> 
+> Gradle
 
 ### 개요
 > 기능 확장 및 공부한걸 활용하기에 게시판이 최적
