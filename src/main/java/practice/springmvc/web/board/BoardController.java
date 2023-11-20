@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
@@ -90,7 +91,7 @@ public class BoardController {
         } else {
             model.addAttribute("board", findBoard);
         }
-        return "boards/board";
+        return "redirect:/board/{boardId}";
     }
 
     @GetMapping("/{boardId}/notrecommend")
@@ -102,7 +103,7 @@ public class BoardController {
         } else {
             model.addAttribute("board", findBoard);
         }
-        return "boards/board";
+        return "redirect:/board/{boardId}";
     }
 
     @GetMapping("/{boardId}/edit")

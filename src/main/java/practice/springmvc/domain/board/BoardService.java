@@ -9,6 +9,7 @@ import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.RecommendService;
+import practice.springmvc.domain.board.repository.BoardRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,10 +39,6 @@ public class BoardService {
 
     public void update(Long boardId, Board updateParam) {
         boardRepository.update(boardId, updateParam);
-    }
-
-    public void clearStore() {
-        boardRepository.clearStore();
     }
 
     // 작성자 IP와 같지 않은 경우 조회수 증가

@@ -3,6 +3,8 @@ package practice.springmvc.domain.board;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import practice.springmvc.domain.board.notrecommend.NotRecommendRepository;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
@@ -13,16 +15,10 @@ import practice.springmvc.domain.member.MemberRepository;
 
 import static org.assertj.core.api.Assertions.*;
 
+@SpringBootTest
 class BoardServiceTest {
-
-    RecommendService recommendService = new RecommendService(new RecommendRepository());
-    NotRecommendService notRecommendService = new NotRecommendService(new NotRecommendRepository());
-    BoardService boardService = new BoardService(new BoardRepository(), recommendService, notRecommendService);
-
-    @AfterEach
-    void afterEach() {
-        boardService.clearStore();
-    }
+    @Autowired
+    BoardService boardService;
 
     @Test
     public void addReadCount() throws Exception {

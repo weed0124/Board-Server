@@ -1,22 +1,28 @@
 package practice.springmvc.domain.board;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import practice.springmvc.domain.board.repository.BoardRepository;
+import practice.springmvc.domain.board.repository.memory.MemoryBoardRepository;
 import practice.springmvc.domain.member.Member;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class BoardRepositoryTest {
 
-    BoardRepository boardRepository = new BoardRepository();
+    @Autowired
+    BoardRepository boardRepository;
 
     @AfterEach
     void afterEach() {
-        boardRepository.clearStore();
+        if (boardRepository instanceof MemoryBoardRepository) {
+            ((MemoryBoardRepository) boardRepository).clearStore();
+        }
     }
 
     @Test
