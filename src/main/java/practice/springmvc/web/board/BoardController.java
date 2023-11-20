@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
@@ -76,7 +75,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public String read(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findById(boardId);
+        Board findBoard = boardService.findById(boardId).get();
         model.addAttribute("board", boardService.addReadCount(findBoard, request));
 
         return "boards/board";
@@ -84,7 +83,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}/recommend")
     public String recommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findById(boardId);
+        Board findBoard = boardService.findById(boardId).get();
         List<Recommend> findRecommends = recommendService.findByBoardId(findBoard.getId());
         if (findRecommends.size() == 0) {
             model.addAttribute("board", boardService.recommend(findBoard, request));
@@ -96,7 +95,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}/notrecommend")
     public String notRecommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findById(boardId);
+        Board findBoard = boardService.findById(boardId).get();
         List<NotRecommend> findNotRecommends = notRecommendService.findByBoardId(findBoard.getId());
         if (findNotRecommends.size() == 0) {
             model.addAttribute("board", boardService.notRecommend(findBoard, request));
@@ -108,7 +107,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}/edit")
     public String editForm(@PathVariable Long boardId, Model model) {
-        Board editBoard = boardService.findById(boardId);
+        Board editBoard = boardService.findById(boardId).get();
         model.addAttribute("board", editBoard);
         return "boards/editForm";
     }
@@ -116,7 +115,7 @@ public class BoardController {
     @PostMapping("/{boardId}/edit")
     public String edit(@PathVariable Long boardId, @ModelAttribute("board") BoardUpdateForm form, BindingResult bindingResult) {
         String passParam = form.getMember().getPassword();
-        String findPassword = boardService.findById(boardId).getMember().getPassword();
+        String findPassword = boardService.findById(boardId).get().getMember().getPassword();
         if (!findPassword.equals(passParam)) {
             bindingResult.reject("loginFail", "비밀번호가 맞지 않습니다.");
         }
@@ -129,7 +128,6 @@ public class BoardController {
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-//        board.setWriter(form.getWriter());
         board.setUpdateDate(new Date());
 
         boardService.update(boardId, board);

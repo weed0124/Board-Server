@@ -3,6 +3,7 @@ package practice.springmvc.domain.board.notrecommend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
 
 import java.util.List;
 

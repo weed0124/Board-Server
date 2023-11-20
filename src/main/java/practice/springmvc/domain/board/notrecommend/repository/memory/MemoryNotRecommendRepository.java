@@ -1,6 +1,8 @@
-package practice.springmvc.domain.board.notrecommend;
+package practice.springmvc.domain.board.notrecommend.repository.memory;
 
 import org.springframework.stereotype.Repository;
+import practice.springmvc.domain.board.notrecommend.NotRecommend;
+import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -10,20 +12,23 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class NotRecommendRepository {
+public class MemoryNotRecommendRepository implements NotRecommendRepository {
     private static final Map<Long, NotRecommend> store = new ConcurrentHashMap<>();
     private static long sequence = 0L;
 
+    @Override
     public NotRecommend save(NotRecommend rec) {
         rec.setId(++sequence);
         store.put(rec.getId(), rec);
         return rec;
     }
 
+    @Override
     public NotRecommend findById(Long id) {
         return store.get(id);
     }
 
+    @Override
     public List<NotRecommend> findByBoardId(Long boardId) {
         Period p = Period.between(LocalDate.now(), LocalDate.now());
         return new ArrayList<>(store.values()).stream()
@@ -31,6 +36,7 @@ public class NotRecommendRepository {
                         && Period.between(nrec.getRegistDate(), LocalDate.now()).getDays() == 0).toList();
     }
 
+    @Override
     public List<NotRecommend> findByNickname(String nickname) {
         return new ArrayList<>(store.values()).stream()
                 .filter(nrec -> nrec.getMember().getNickname().equals(nickname)

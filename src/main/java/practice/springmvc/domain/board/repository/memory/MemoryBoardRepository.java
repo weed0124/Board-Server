@@ -4,10 +4,7 @@ import org.springframework.stereotype.Repository;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.repository.BoardRepository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -24,8 +21,8 @@ public class MemoryBoardRepository implements BoardRepository {
     }
 
     @Override
-    public Board findById(Long id) {
-        return store.get(id);
+    public Optional<Board> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
     }
 
     @Override
@@ -35,7 +32,7 @@ public class MemoryBoardRepository implements BoardRepository {
 
     @Override
     public void update(Long boardId, Board updateParam) {
-        Board findBoard = findById(boardId);
+        Board findBoard = findById(boardId).get();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
         findBoard.setUpdateDate(new Date());

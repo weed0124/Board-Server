@@ -29,7 +29,7 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    public Board findById(Long id) {
+    public Optional<Board> findById(Long id) {
         return boardRepository.findById(id);
     }
 

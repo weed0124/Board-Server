@@ -34,7 +34,7 @@ class BoardRepositoryTest {
         Board saveBoard = boardRepository.save(board);
 
         // then
-        Board findBoard = boardRepository.findById(saveBoard.getId());
+        Board findBoard = boardRepository.findById(saveBoard.getId()).get();
         assertThat(findBoard).isEqualTo(saveBoard);
 
     }
@@ -68,7 +68,7 @@ class BoardRepositoryTest {
         Board updateParam = new Board("board_edit", "content_edit", new Member("익명", "test"));
         boardRepository.update(id, updateParam);
 
-        Board findBoard = boardRepository.findById(id);
+        Board findBoard = boardRepository.findById(id).get();
 
         // then
         assertThat(findBoard.getTitle()).isEqualTo(updateParam.getTitle());
