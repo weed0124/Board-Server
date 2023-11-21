@@ -1,25 +1,36 @@
 package practice.springmvc.domain.board.recommend;
 
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
+import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.member.Member;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Entity
 @Getter @Setter
 public class Recommend {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long boardId;
+
+    @ManyToOne
+    @JoinColumn
     private Member member;
-    private LocalDate registDate;
+
+    @ManyToOne
+    @JoinColumn
+    private Board board;
+
+    private LocalDateTime registDate;
 
     public Recommend() {
     }
 
-    public Recommend(Long boardId, Member member, LocalDate registDate) {
-        this.boardId = boardId;
+    public Recommend(Board board, Member member, LocalDateTime registDate) {
+        this.board = board;
         this.member = member;
         this.registDate = registDate;
     }

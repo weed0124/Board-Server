@@ -17,9 +17,9 @@ public class NotRecommendService {
         return notRecommendRepository.save(notRecommend);
     }
 
-    public List<NotRecommend> findByBoardId(Long boardId) {
-        return notRecommendRepository.findByBoardId(boardId);
-    }
+//    public List<NotRecommend> findByBoardId(Long boardId) {
+//        return notRecommendRepository.findByBoardId(boardId);
+//    }
 
     public List<NotRecommend> findByNickname(String nickname) {
         return notRecommendRepository.findByNickname(nickname);

@@ -10,8 +10,12 @@ import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.RecommendService;
 import practice.springmvc.domain.board.repository.BoardRepository;
+import practice.springmvc.domain.member.Member;
+import practice.springmvc.domain.member.MemberService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final RecommendService recommendService;
     private final NotRecommendService notRecommendService;
+    private final MemberService memberService;
 
     public Board save(Board board) {
         return boardRepository.save(board);
@@ -45,7 +50,7 @@ public class BoardService {
     public Board addReadCount(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
-            board.setReadCount(board.getReadCount() + 1);
+            boardRepository.addReadCount(board.getId());
         }
 
         return board;
@@ -54,8 +59,11 @@ public class BoardService {
     // 작성자 IP와 같지 않은 경우 추천수 증가
     public Board recommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
+        Period p = Period.between(LocalDate.now(), LocalDate.now());
         if (!ownIp) {
-            Recommend recommend = new Recommend(board.getId(), board.getMember(), LocalDate.now());
+            Member member = new Member(getRemoteIp(request));
+            memberService.save(member);
+            Recommend recommend = new Recommend(board, member, LocalDateTime.now());
             recommendService.save(recommend);
             List<Recommend> recommends = Optional.ofNullable(board.getRecommends()).orElseGet(() -> new ArrayList<>());
             recommends.add(recommend);
@@ -68,7 +76,9 @@ public class BoardService {
     public Board notRecommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
-            NotRecommend notRecommend = new NotRecommend(board.getId(), board.getMember(), LocalDate.now());
+            Member member = new Member(getRemoteIp(request));
+            memberService.save(member);
+            NotRecommend notRecommend = new NotRecommend(board, member, LocalDateTime.now());
             notRecommendService.save(notRecommend);
             List<NotRecommend> notRecommends = Optional.ofNullable(board.getNotRecommends()).orElseGet(() -> new ArrayList<>());
             notRecommends.add(notRecommend);

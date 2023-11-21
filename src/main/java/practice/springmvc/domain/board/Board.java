@@ -1,5 +1,6 @@
 package practice.springmvc.domain.board;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -13,18 +14,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Entity
 @Component
 @Getter @Setter
 public class Board {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String content;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Member member;
     private LocalDateTime registDate;
     private LocalDateTime updateDate;
     private int readCount;
+
+    @OneToMany(mappedBy = "board")
     private List<Recommend> recommends;
+
+    @OneToMany(mappedBy = "board")
     private List<NotRecommend> notRecommends;
+
+    @OneToMany(mappedBy = "board")
     private List<Comment> comments;
 
     public Board() {

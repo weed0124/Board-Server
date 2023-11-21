@@ -9,7 +9,7 @@ public interface RecommendRepository {
 
     Recommend findById(Long id);
 
-    List<Recommend> findByBoardId(Long boardId);
+//    List<Recommend> findByBoardId(Long boardId);
 
     List<Recommend> findByNickname(String nickname);
 }

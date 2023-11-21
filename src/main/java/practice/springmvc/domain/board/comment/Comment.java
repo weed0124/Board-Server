@@ -1,20 +1,31 @@
 package practice.springmvc.domain.board.comment;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.member.Member;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Entity
 @Getter @Setter
 public class Comment {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long boardId;
+
+    @ManyToOne
+    @JoinColumn
     private Member member;
-    /*
-    private String register;
-    private String password;
-    */
+
+    @ManyToOne
+    @JoinColumn
+    private Board board;
+
     private String content;
-    private LocalDate registDate;
+    private LocalDateTime registDate;
+
+    public Comment() {
+    }
 }

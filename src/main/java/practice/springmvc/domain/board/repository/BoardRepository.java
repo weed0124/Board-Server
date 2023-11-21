@@ -13,4 +13,6 @@ public interface BoardRepository {
     List<Board> findAll();
 
     void update(Long boardId, Board updateParam);
+
+    void addReadCount(Long boardId);
 }

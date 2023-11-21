@@ -84,8 +84,8 @@ public class BoardController {
     @GetMapping("/{boardId}/recommend")
     public String recommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardService.findById(boardId).get();
-        List<Recommend> findRecommends = recommendService.findByBoardId(findBoard.getId());
-        if (findRecommends.size() == 0) {
+        List<Recommend> findRecommends = findBoard.getRecommends();
+        if (findRecommends != null) {
             model.addAttribute("board", boardService.recommend(findBoard, request));
         } else {
             model.addAttribute("board", findBoard);
@@ -96,8 +96,8 @@ public class BoardController {
     @GetMapping("/{boardId}/notrecommend")
     public String notRecommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardService.findById(boardId).get();
-        List<NotRecommend> findNotRecommends = notRecommendService.findByBoardId(findBoard.getId());
-        if (findNotRecommends.size() == 0) {
+        List<NotRecommend> findNotRecommends = findBoard.getNotRecommends();
+        if (findNotRecommends != null) {
             model.addAttribute("board", boardService.notRecommend(findBoard, request));
         } else {
             model.addAttribute("board", findBoard);

@@ -9,7 +9,7 @@ public interface NotRecommendRepository {
 
     NotRecommend findById(Long id);
 
-    List<NotRecommend> findByBoardId(Long boardId);
+//    List<NotRecommend> findByBoardId(Long boardId);
 
     List<NotRecommend> findByNickname(String nickname);
 }

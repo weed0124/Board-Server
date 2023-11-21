@@ -21,9 +21,9 @@ public class RecommendService {
         return recommendRepository.findById(id);
     }
 
-    public List<Recommend> findByBoardId(Long boardId) {
-        return recommendRepository.findByBoardId(boardId);
-    }
+//    public List<Recommend> findByBoardId(Long boardId) {
+//        return recommendRepository.findByBoardId(boardId);
+//    }
 
     public List<Recommend> findByNickname(String nickname) {
         return recommendRepository.findByNickname(nickname);

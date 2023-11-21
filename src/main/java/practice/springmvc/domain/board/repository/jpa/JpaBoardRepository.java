@@ -1,41 +1,48 @@
-package practice.springmvc.domain.board.repository.memory;
+package practice.springmvc.domain.board.repository.jpa;
 
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.repository.BoardRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Repository
-public class MemoryBoardRepository implements BoardRepository {
+@Transactional
+public class JpaBoardRepository implements BoardRepository {
 
-    private static final Map<Long, Board> store = new ConcurrentHashMap<>();
-    private static long sequence = 0L;
+    private final EntityManager em;
+
+    public JpaBoardRepository(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public Board save(Board board) {
-        board.setId(++sequence);
-        store.put(board.getId(), board);
+        em.persist(board);
         return board;
     }
 
     @Override
     public Optional<Board> findById(Long id) {
-        return Optional.ofNullable(store.get(id));
+        Board findBoard = em.find(Board.class, id);
+        return Optional.ofNullable(findBoard);
     }
 
     @Override
     public List<Board> findAll() {
-        return new ArrayList<>(store.values());
+        String jpql = "select b from Board b";
+        return em.createQuery(jpql, Board.class).getResultList();
     }
 
     @Override
     public void update(Long boardId, Board updateParam) {
-        Board findBoard = findById(boardId).get();
+        Board findBoard = em.find(Board.class, boardId);
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
         findBoard.setUpdateDate(LocalDateTime.now());
@@ -43,11 +50,7 @@ public class MemoryBoardRepository implements BoardRepository {
 
     @Override
     public void addReadCount(Long boardId) {
-        Board findBoard = findById(boardId).get();
+        Board findBoard = em.find(Board.class, boardId);
         findBoard.setReadCount(findBoard.getReadCount() + 1);
-    }
-
-    public void clearStore() {
-        store.clear();
     }
 }

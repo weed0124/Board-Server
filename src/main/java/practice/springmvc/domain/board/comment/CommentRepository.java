@@ -20,9 +20,9 @@ public class CommentRepository {
         return comment;
     }
 
-    public List<Comment> findByBoardId(Long boardId) {
-        return new ArrayList<>(store.values()).stream()
-                .filter(comment -> comment.getBoardId().equals(boardId))
-                .toList();
-    }
+//    public List<Comment> findByBoardId(Long boardId) {
+//        return new ArrayList<>(store.values()).stream()
+//                .filter(comment -> comment.getBoardId().equals(boardId))
+//                .toList();
+//    }
 }
