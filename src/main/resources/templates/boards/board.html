@@ -38,7 +38,7 @@
     </div>
     <div>
         <label for="registDate" th:text="#{label.board.registDate}">게시글 작성일</label>
-        <input type="text" id="registDate" name="registDate" class="form-control" value="2023/11/14" th:value="${#dates.format(board.registDate, 'yyyy.MM.dd HH:mm:ss')}" readonly>
+        <input type="text" id="registDate" name="registDate" class="form-control" value="2023/11/14" th:value="${#temporals.format(board.registDate, 'yyyy.MM.dd HH:mm:ss')}" readonly>
     </div>
     <div>
         <label for="readCount" th:text="#{label.board.readCount}">게시글 조회수</label>

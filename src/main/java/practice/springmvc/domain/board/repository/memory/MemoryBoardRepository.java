@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.repository.BoardRepository;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,7 +36,7 @@ public class MemoryBoardRepository implements BoardRepository {
         Board findBoard = findById(boardId).get();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
-        findBoard.setUpdateDate(new Date());
+        findBoard.setUpdateDate(LocalDateTime.now());
     }
 
     public void clearStore() {

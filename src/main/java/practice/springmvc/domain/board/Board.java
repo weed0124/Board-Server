@@ -8,8 +8,8 @@ import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.member.Member;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +20,8 @@ public class Board {
     private String title;
     private String content;
     private Member member;
-    private Date registDate;
-    private Date updateDate;
+    private LocalDateTime registDate;
+    private LocalDateTime updateDate;
     private int readCount;
     private List<Recommend> recommends;
     private List<NotRecommend> notRecommends;

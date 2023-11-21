@@ -19,7 +19,7 @@ import practice.springmvc.domain.member.Member;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -66,8 +66,8 @@ public class BoardController {
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
         board.setMember(new Member(form.getMember().getNickname(), form.getMember().getPassword(), boardService.getRemoteIp(request)));
-        board.setRegistDate(new Date());
-        board.setUpdateDate(new Date());
+        board.setRegistDate(LocalDateTime.now());
+        board.setUpdateDate(LocalDateTime.now());
 
         boardService.save(board);
         return "redirect:/board";
@@ -128,7 +128,7 @@ public class BoardController {
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-        board.setUpdateDate(new Date());
+        board.setUpdateDate(LocalDateTime.now());
 
         boardService.update(boardId, board);
         return "redirect:/board";
