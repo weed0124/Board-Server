@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -15,6 +16,10 @@ public class NotRecommendService {
 
     public NotRecommend save(NotRecommend notRecommend) {
         return notRecommendRepository.save(notRecommend);
+    }
+
+    public Optional<NotRecommend> findById(Long id) {
+        return notRecommendRepository.findById(id);
     }
 
 //    public List<NotRecommend> findByBoardId(Long boardId) {

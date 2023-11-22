@@ -14,11 +14,11 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @Transactional
-public class JpaBoardRepository implements BoardRepository {
+public class JpaBoardRepositoryV1 implements BoardRepository {
 
     private final EntityManager em;
 
-    public JpaBoardRepository(EntityManager em) {
+    public JpaBoardRepositoryV1(EntityManager em) {
         this.em = em;
     }
 

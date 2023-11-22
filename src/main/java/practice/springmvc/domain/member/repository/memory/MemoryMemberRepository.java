@@ -6,6 +6,7 @@ import practice.springmvc.domain.member.Member;
 import practice.springmvc.domain.member.repository.MemberRepository;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,8 +21,8 @@ public class MemoryMemberRepository implements MemberRepository {
         return member;
     }
 
-    public Member findById(String id) {
-        return store.get(id);
+    public Optional<Member> findById(String id) {
+        return Optional.ofNullable(store.get(id));
     }
 
     public void clearStore() {

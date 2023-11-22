@@ -1,4 +1,4 @@
-package practice.springmvc.domain.member.repository;
+package practice.springmvc.domain.member.repository.jpa;
 
 
 import jakarta.persistence.EntityManager;
@@ -6,15 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.member.Member;
+import practice.springmvc.domain.member.repository.MemberRepository;
+
+import java.util.Optional;
 
 @Slf4j
 @Repository
 @Transactional
-public class JpaMemberRepository implements MemberRepository {
+public class JpaMemberRepositoryV1 implements MemberRepository {
 
     private final EntityManager em;
 
-    public JpaMemberRepository(EntityManager em) {
+    public JpaMemberRepositoryV1(EntityManager em) {
         this.em = em;
     }
 
@@ -25,8 +28,8 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member findById(String id) {
+    public Optional<Member> findById(String id) {
         Member member = em.find(Member.class, id);
-        return member;
+        return Optional.ofNullable(member);
     }
 }

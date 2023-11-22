@@ -61,13 +61,18 @@ public class BoardService {
         boolean ownIp = isOwnIp(board, request);
         Period p = Period.between(LocalDate.now(), LocalDate.now());
         if (!ownIp) {
-            Member member = new Member(getRemoteIp(request));
-            memberService.save(member);
-            Recommend recommend = new Recommend(board, member, LocalDateTime.now());
-            recommendService.save(recommend);
             List<Recommend> recommends = Optional.ofNullable(board.getRecommends()).orElseGet(() -> new ArrayList<>());
-            recommends.add(recommend);
-            board.setRecommends(recommends);
+            List<Recommend> oneDayRecommend = recommends.stream()
+                    .filter(rec -> Period.between(rec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
+                    .toList();
+            if (oneDayRecommend.size() == 0) {
+                Member member = new Member(getRemoteIp(request));
+                memberService.save(member);
+                Recommend recommend = new Recommend(board, member, LocalDateTime.now());
+                recommendService.save(recommend);
+                recommends.add(recommend);
+                board.setRecommends(recommends);
+            }
         }
         return board;
     }
@@ -76,13 +81,18 @@ public class BoardService {
     public Board notRecommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
-            Member member = new Member(getRemoteIp(request));
-            memberService.save(member);
-            NotRecommend notRecommend = new NotRecommend(board, member, LocalDateTime.now());
-            notRecommendService.save(notRecommend);
             List<NotRecommend> notRecommends = Optional.ofNullable(board.getNotRecommends()).orElseGet(() -> new ArrayList<>());
-            notRecommends.add(notRecommend);
-            board.setNotRecommends(notRecommends);
+            List<NotRecommend> oneDayNotRecommend = notRecommends.stream()
+                    .filter(notRec -> Period.between(notRec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
+                    .toList();
+            if (oneDayNotRecommend.size() == 0) {
+                Member member = new Member(getRemoteIp(request));
+                memberService.save(member);
+                NotRecommend notRecommend = new NotRecommend(board, member, LocalDateTime.now());
+                notRecommendService.save(notRecommend);
+                notRecommends.add(notRecommend);
+                board.setNotRecommends(notRecommends);
+            }
         }
 
         return board;

@@ -1,35 +1,29 @@
 package practice.springmvc.domain.board.recommend.repository.jpa;
 
-import jakarta.persistence.EntityManager;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.repository.RecommendRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-@Slf4j
 @Repository
 @Transactional
-public class JpaRecommendRepository implements RecommendRepository {
+@RequiredArgsConstructor
+public class JpaRecommendRepositoryV2 implements RecommendRepository {
 
-    private final EntityManager em;
-
-    public JpaRecommendRepository(EntityManager em) {
-        this.em = em;
-    }
+    private final SpringDataJpaRecommendRepository repository;
 
     @Override
     public Recommend save(Recommend recommend) {
-        em.persist(recommend);
-        return recommend;
+        return repository.save(recommend);
     }
 
     @Override
-    public Recommend findById(Long id) {
-        Recommend recommend = em.find(Recommend.class, id);
-        return recommend;
+    public Optional<Recommend> findById(Long id) {
+        return repository.findById(id);
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -24,8 +25,8 @@ public class MemoryNotRecommendRepository implements NotRecommendRepository {
     }
 
     @Override
-    public NotRecommend findById(Long id) {
-        return store.get(id);
+    public Optional<NotRecommend> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
     }
 
 //    @Override

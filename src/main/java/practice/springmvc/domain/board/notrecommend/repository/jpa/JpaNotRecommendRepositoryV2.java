@@ -1,41 +1,30 @@
 package practice.springmvc.domain.board.notrecommend.repository.jpa;
 
-import jakarta.persistence.EntityManager;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-@Slf4j
 @Repository
 @Transactional
-public class JpaNotRecommendRepository implements NotRecommendRepository {
+@RequiredArgsConstructor
+public class JpaNotRecommendRepositoryV2 implements NotRecommendRepository {
 
-    private final EntityManager em;
-
-    public JpaNotRecommendRepository(EntityManager em) {
-        this.em = em;
-    }
+    private final SpringDataJpaNotRecommendRepository repository;
 
     @Override
     public NotRecommend save(NotRecommend notRecommend) {
-        em.persist(notRecommend);
-        return notRecommend;
+        return repository.save(notRecommend);
     }
 
     @Override
-    public NotRecommend findById(Long id) {
-        NotRecommend notRecommend = em.find(NotRecommend.class, id);
-        return notRecommend;
+    public Optional<NotRecommend> findById(Long id) {
+        return repository.findById(id);
     }
-
-//    @Override
-//    public List<NotRecommend> findByBoardId(Long boardId) {
-//        return null;
-//    }
 
     @Override
     public List<NotRecommend> findByNickname(String nickname) {

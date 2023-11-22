@@ -3,11 +3,12 @@ package practice.springmvc.domain.board.notrecommend.repository;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NotRecommendRepository {
     NotRecommend save(NotRecommend notRecommend);
 
-    NotRecommend findById(Long id);
+    Optional<NotRecommend> findById(Long id);
 
 //    List<NotRecommend> findByBoardId(Long boardId);
 
