@@ -10,11 +10,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practice.springmvc.domain.board.Board;
+import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
-import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
-import practice.springmvc.domain.board.recommend.RecommendService;
 import practice.springmvc.domain.member.Member;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
@@ -28,14 +27,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
 
-    private final RecommendService recommendService;
-    private final NotRecommendService notRecommendService;
     private final BoardService boardService;
     private final MessageSource ms;
 
     @GetMapping
-    public String boards(Model model) {
-        List<Board> boardList = boardService.findAll();
+    public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model) {
+        List<Board> boardList = boardService.findAll(boardSearch);
         model.addAttribute("boards", boardList);
         return "boards/boards";
     }

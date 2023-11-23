@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.member.repository.MemberRepository;
 import practice.springmvc.domain.member.repository.memory.MemoryMemberRepository;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -33,7 +35,7 @@ class MemberRepositoryTest {
         Member saveMember = memberRepository.save(member);
 
         // then
-        Member findMember = memberRepository.findById(saveMember.getId());
+        Member findMember = memberRepository.findById(saveMember.getId()).get();
         assertThat(findMember).isEqualTo(saveMember);
     }
 }

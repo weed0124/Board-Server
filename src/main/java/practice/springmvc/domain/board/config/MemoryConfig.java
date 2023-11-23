@@ -15,7 +15,7 @@ import practice.springmvc.domain.member.MemberService;
 import practice.springmvc.domain.member.repository.MemberRepository;
 import practice.springmvc.domain.member.repository.memory.MemoryMemberRepository;
 
-//@Configuration
+@Configuration
 public class MemoryConfig {
 
     @Bean

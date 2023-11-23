@@ -38,8 +38,8 @@ public class BoardService {
         return boardRepository.findById(id);
     }
 
-    public List<Board> findAll() {
-        return boardRepository.findAll();
+    public List<Board> findAll(BoardSearchCond cond) {
+        return boardRepository.findAll(cond);
     }
 
     public void update(Long boardId, Board updateParam) {

@@ -14,6 +14,7 @@ import practice.springmvc.domain.board.recommend.repository.jpa.JpaRecommendRepo
 import practice.springmvc.domain.board.recommend.repository.jpa.SpringDataJpaRecommendRepository;
 import practice.springmvc.domain.board.repository.BoardRepository;
 import practice.springmvc.domain.board.repository.jpa.JpaBoardRepositoryV2;
+import practice.springmvc.domain.board.repository.jpa.JpaBoardRepositoryV3;
 import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
 import practice.springmvc.domain.member.MemberService;
 import practice.springmvc.domain.member.repository.MemberRepository;
@@ -36,7 +37,7 @@ public class SpringDataJpaConfig {
 
     @Bean
     public BoardRepository boardRepository() {
-        return new JpaBoardRepositoryV2(springDataJpaBoardRepository);
+        return new JpaBoardRepositoryV3(springDataJpaBoardRepository, em);
     }
 
     @Bean

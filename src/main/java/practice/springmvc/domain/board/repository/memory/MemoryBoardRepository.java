@@ -2,7 +2,9 @@ package practice.springmvc.domain.board.repository.memory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 import practice.springmvc.domain.board.Board;
+import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.repository.BoardRepository;
 
 import java.time.LocalDateTime;
@@ -29,8 +31,29 @@ public class MemoryBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> findAll() {
-        return new ArrayList<>(store.values());
+    public List<Board> findAll(BoardSearchCond cond) {
+        String title = cond.getTitle();
+        String nickname = cond.getNickname();
+
+        if (StringUtils.hasText(title) && StringUtils.hasText(nickname)) {
+            return new ArrayList<>(store.values()
+                    .stream()
+                    .filter(board -> board.getMember().getNickname().equals(nickname)
+                            && board.getTitle().equals(title))
+                    .toList());
+        } else if (StringUtils.hasText(title)) {
+            return new ArrayList<>(store.values()
+                    .stream()
+                    .filter(board -> board.getTitle().equals(title))
+                    .toList());
+        } else if (StringUtils.hasText(nickname)) {
+            return new ArrayList<>(store.values()
+                    .stream()
+                    .filter(board -> board.getMember().getNickname().equals(nickname))
+                    .toList());
+        } else {
+            return new ArrayList<>(store.values());
+        }
     }
 
     @Override

@@ -14,6 +14,8 @@
 > 
 > Spring Data JPA
 > 
+> QueryDSL
+> 
 > H2 Database
 
 ### 개요
@@ -35,3 +37,5 @@
 > Memory -> DB로 데이터 저장 처리 및 리팩토링하여 JPA 사용 처리(23/11/21)
 > 
 > JPA -> Spring Data JPA 변경하여 기능 반영(23/11/22)
+> 
+> QueryDSL 적용 및 검색 기능 구현(23/11/23)

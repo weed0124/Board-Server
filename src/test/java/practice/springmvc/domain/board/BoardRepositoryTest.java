@@ -42,7 +42,7 @@ class BoardRepositoryTest {
     }
 
     @Test
-    public void findAll() throws Exception {
+    public void findBoards() throws Exception {
         // given
         Board board1 = new Board("board1", "content1", new Member("익명1", "test", "127.0.0.1"));
         Board board2 = new Board("board2", "content2", new Member("익명2", "test2", "127.0.0.1"));
@@ -50,12 +50,21 @@ class BoardRepositoryTest {
         boardRepository.save(board1);
         boardRepository.save(board2);
 
-        // when
-        List<Board> boardList = boardRepository.findAll();
+        test(null, null, board1, board2);
+        test(null, "", board1, board2);
+        test("", null, board1, board2);
 
-        // then
-        assertThat(boardList.size()).isEqualTo(2);
-        assertThat(boardList).contains(board1, board2);
+        test("board1", null, board1);
+        test("board2", null, board2);
+
+        test(null, "익명", board1, board2);
+
+        test("board1", "익명1", board1);
+    }
+
+    void test(String title, String nickname, Board... boards) {
+        List<Board> result = boardRepository.findAll(new BoardSearchCond(title, nickname));
+        assertThat(result).containsExactly(boards);
     }
 
     @Test

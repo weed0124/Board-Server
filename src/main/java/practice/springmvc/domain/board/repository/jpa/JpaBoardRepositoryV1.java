@@ -1,10 +1,13 @@
 package practice.springmvc.domain.board.repository.jpa;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import practice.springmvc.domain.board.Board;
+import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.repository.BoardRepository;
 
 import java.time.LocalDateTime;
@@ -35,9 +38,30 @@ public class JpaBoardRepositoryV1 implements BoardRepository {
     }
 
     @Override
-    public List<Board> findAll() {
-        String jpql = "select b from Board b";
-        return em.createQuery(jpql, Board.class).getResultList();
+    public List<Board> findAll(BoardSearchCond cond) {
+        String title = cond.getTitle();
+        String nickname = cond.getNickname();
+
+        String jpql = "select b from Board b, Member m where b.memberId = m.id";
+
+        if (StringUtils.hasText(title)) {
+            jpql += " and b.title like concat('%', :title, '%')";
+        }
+
+        if (StringUtils.hasText(nickname)) {
+            jpql += " and m.nickname like concat('%', :nickname, '%')";
+        }
+
+        TypedQuery<Board> query = em.createQuery(jpql, Board.class);
+        if (StringUtils.hasText(title)) {
+            query.setParameter("title", title);
+        }
+
+        if (StringUtils.hasText(nickname)) {
+            query.setParameter("nickname", nickname);
+        }
+
+        return query.getResultList();
     }
 
     @Override

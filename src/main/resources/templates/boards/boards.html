@@ -7,19 +7,35 @@
 </head>
 <body>
 
-<div class="container" style="max-width: 600px">
+<div class="container" style="max-width: 720px">
     <div class="py-5 text-center">
         <h2 th:text="#{page.boards}">게시판 목록</h2>
     </div>
 
+    <form th:object="${boardSearch}" method="get" class="form-inline">
     <div class="row">
         <div class="col">
-            <button class="btn btn-primary float-end"
-                    onclick="location.href='addForm.html'"
-                    th:onclick="|location.href='@{/board/add}'|"
-                    type="button" th:text="#{page.addBoard}">게시글 등록</button>
+            <input type="text" th:field="*{title}" class="form-control" placeholder="제목"/>
+        </div>
+        <div class="col">
+            <input type="text" th:field="*{nickname}" class="form-control" placeholder="닉네임"/>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-secondary mb-2">검색</button>
+        </div>
+        <div class="col">
+        </div>
+        <div class="col">
+            <div class="col">
+                <button class="btn btn-primary float-end"
+                        onclick="location.href='addForm.html'"
+                        th:onclick="|location.href='@{/board/add}'|"
+                        type="button" th:text="#{page.addBoard}">게시글 등록</button>
+            </div>
         </div>
     </div>
+
+    </form>
 
     <hr class="my-4">
     <div>
