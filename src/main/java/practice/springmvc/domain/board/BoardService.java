@@ -38,6 +38,10 @@ public class BoardService {
         return boardRepository.findById(id);
     }
 
+    public List<Board> findAll() {
+        return boardRepository.findAll();
+    }
+
     public List<Board> findAll(BoardSearchCond cond) {
         return boardRepository.findAll(cond);
     }
@@ -96,6 +100,13 @@ public class BoardService {
         }
 
         return board;
+    }
+
+    public List<Board> bestBoards() {
+        List<Board> boardList = findAll();
+        return boardList.stream()
+                .filter(board -> board.getRecommends().size() >= 1)
+                .toList();
     }
 
     private boolean isOwnIp(Board board, HttpServletRequest request) {

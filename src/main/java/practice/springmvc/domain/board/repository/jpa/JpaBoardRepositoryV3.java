@@ -42,11 +42,14 @@ public class JpaBoardRepositoryV3 implements BoardRepository {
     }
 
     @Override
+    public List<Board> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
     public List<Board> findAll(BoardSearchCond cond) {
         String nickname = cond.getNickname();
         String title = cond.getTitle();
-        log.info("v3 nickname={}", nickname);
-        log.info("v3 title={}", title);
 
         return query
                 .select(board)
