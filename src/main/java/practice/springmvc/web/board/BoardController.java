@@ -34,6 +34,7 @@ public class BoardController {
     public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model) {
         List<Board> boardList = boardService.findAll(boardSearch);
         model.addAttribute("boards", boardList);
+        model.addAttribute("today", LocalDateTime.now());
         return "boards/boards";
     }
 
