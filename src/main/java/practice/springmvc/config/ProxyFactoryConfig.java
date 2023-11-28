@@ -96,6 +96,10 @@ public class ProxyFactoryConfig {
         return result;
     }
 
+    /**
+     * Pointcut(Filter역할) + Advice(부가기능) = Advisor(어떤 클래스, 메소드에 어떤 부가기능을 지정할지 알고있음)
+     * @return
+     */
     private Advisor getAdvisor() {
         NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
         pointcut.setMappedNames("save*", "find*", "update", "add*");
