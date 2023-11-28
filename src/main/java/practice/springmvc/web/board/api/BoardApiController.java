@@ -65,13 +65,13 @@ public class BoardApiController {
 
     @Getter @Setter
     @AllArgsConstructor
-    class Result<T> {
+    static class Result<T> {
         private T data;
     }
 
     @Getter @Setter
     @AllArgsConstructor
-    class BoardApiDTO {
+    static class BoardApiDTO {
         Long id;
         String title;
         String content;
