@@ -10,7 +10,8 @@ import practice.springmvc.config.advice.LogAdvice;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
-import practice.springmvc.domain.board.notrecommend.repository.jpa.JpaNotRecommendRepositoryV1;
+import practice.springmvc.domain.board.notrecommend.repository.jpa.JpaNotRecommendRepositoryV2;
+import practice.springmvc.domain.board.notrecommend.repository.jpa.SpringDataJpaNotRecommendRepository;
 import practice.springmvc.domain.board.recommend.RecommendService;
 import practice.springmvc.domain.board.recommend.repository.RecommendRepository;
 import practice.springmvc.domain.board.recommend.repository.jpa.JpaRecommendRepositoryV2;
@@ -31,64 +32,57 @@ public class ProxyFactoryConfig {
     private final SpringDataJpaBoardRepository springDataJpaBoardRepository;
     private final SpringDataJpaMemberRepository springDataJpaMemberRepository;
     private final SpringDataJpaRecommendRepository springDataJpaRecommendRepository;
+    private final SpringDataJpaNotRecommendRepository springDataJpaNotRecommendRepository;
     private final EntityManager em;
     private final LogAdvice logAdvice;
 
     @Bean
     public BoardService boardService() {
-        return new BoardService(boardRepository(),
+        return getLogAdviceProxy(new BoardService(boardRepository(),
                 recommendService(),
                 notRecommendService(),
-                memberService());
+                memberService()));
     }
 
     @Bean
     public BoardRepository boardRepository() {
-        BoardRepository boardRepository = new JpaBoardRepositoryV3(springDataJpaBoardRepository, em);
-        ProxyFactory proxyFactory = new ProxyFactory(boardRepository);
-        proxyFactory.addAdvice(logAdvice);
-        BoardRepository proxy = (BoardRepository) proxyFactory.getProxy();
-
-        return proxy;
+        return getLogAdviceProxy((BoardRepository) new JpaBoardRepositoryV3(springDataJpaBoardRepository, em));
     }
 
     @Bean
     public RecommendService recommendService() {
-        return new RecommendService(recommendRepository());
+        return getLogAdviceProxy(new RecommendService(recommendRepository()));
     }
 
     @Bean
     public RecommendRepository recommendRepository() {
-        RecommendRepository recommendRepository = new JpaRecommendRepositoryV2(springDataJpaRecommendRepository);
-        ProxyFactory proxyFactory = new ProxyFactory(recommendRepository);
-        proxyFactory.addAdvice(logAdvice);
-        RecommendRepository proxy = (RecommendRepository) proxyFactory.getProxy();
-
-        return proxy;
+        return getLogAdviceProxy((RecommendRepository) new JpaRecommendRepositoryV2(springDataJpaRecommendRepository));
     }
 
     @Bean
     public NotRecommendService notRecommendService() {
-        return new NotRecommendService(notRecommendRepository());
+        return getLogAdviceProxy(new NotRecommendService(notRecommendRepository()));
     }
 
     @Bean
     public NotRecommendRepository notRecommendRepository() {
-        return new JpaNotRecommendRepositoryV1(em);
+        return getLogAdviceProxy((NotRecommendRepository) new JpaNotRecommendRepositoryV2(springDataJpaNotRecommendRepository));
     }
 
     @Bean
     public MemberService memberService() {
-        return new MemberService(memberRepository());
+        return getLogAdviceProxy(new MemberService(memberRepository()));
     }
 
     @Bean
     public MemberRepository memberRepository() {
-        MemberRepository memberRepository = new JpaMemberRepositoryV2(springDataJpaMemberRepository);
-        ProxyFactory proxyFactory = new ProxyFactory(memberRepository);
-        proxyFactory.addAdvice(logAdvice);
-        MemberRepository proxy = (MemberRepository) proxyFactory.getProxy();
+        return getLogAdviceProxy((MemberRepository) new JpaMemberRepositoryV2(springDataJpaMemberRepository));
+    }
 
-        return proxy;
+    private <T> T getLogAdviceProxy(T proxy) {
+        ProxyFactory proxyFactory = new ProxyFactory(proxy);
+        proxyFactory.addAdvice(logAdvice);
+        T result = (T) proxyFactory.getProxy();
+        return result;
     }
 }
