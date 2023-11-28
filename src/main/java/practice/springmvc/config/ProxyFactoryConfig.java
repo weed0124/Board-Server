@@ -3,10 +3,14 @@ package practice.springmvc.config;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aopalliance.aop.Advice;
+import org.springframework.aop.Advisor;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import practice.springmvc.config.advice.LogAdvice;
+import practice.springmvc.config.advice.LogTraceAdvice;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
@@ -34,7 +38,7 @@ public class ProxyFactoryConfig {
     private final SpringDataJpaRecommendRepository springDataJpaRecommendRepository;
     private final SpringDataJpaNotRecommendRepository springDataJpaNotRecommendRepository;
     private final EntityManager em;
-    private final LogAdvice logAdvice;
+    private final LogTraceAdvice logTraceAdvice;
 
     @Bean
     public BoardService boardService() {
@@ -79,10 +83,22 @@ public class ProxyFactoryConfig {
         return getLogAdviceProxy((MemberRepository) new JpaMemberRepositoryV2(springDataJpaMemberRepository));
     }
 
+    /**
+     * 메소드 실행시간 및 로그 추가 시 사용 Proxy
+     * @param proxy
+     * @return
+     * @param <T>
+     */
     private <T> T getLogAdviceProxy(T proxy) {
         ProxyFactory proxyFactory = new ProxyFactory(proxy);
-        proxyFactory.addAdvice(logAdvice);
+        proxyFactory.addAdvisor(getAdvisor());
         T result = (T) proxyFactory.getProxy();
         return result;
+    }
+
+    private Advisor getAdvisor() {
+        NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+        pointcut.setMappedNames("save*", "find*", "update", "add*");
+        return new DefaultPointcutAdvisor(pointcut, logTraceAdvice);
     }
 }

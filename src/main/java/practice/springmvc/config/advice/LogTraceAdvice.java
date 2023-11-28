@@ -5,11 +5,11 @@ import org.aopalliance.intercept.MethodInvocation;
 import practice.springmvc.trace.TraceStatus;
 import practice.springmvc.trace.logtrace.LogTrace;
 
-public class LogAdvice implements MethodInterceptor {
+public class LogTraceAdvice implements MethodInterceptor {
 
     private final LogTrace logTrace;
 
-    public LogAdvice(LogTrace logTrace) {
+    public LogTraceAdvice(LogTrace logTrace) {
         this.logTrace = logTrace;
     }
 
