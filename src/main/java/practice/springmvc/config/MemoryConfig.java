@@ -1,4 +1,4 @@
-package practice.springmvc.domain.board.config;
+package practice.springmvc.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
