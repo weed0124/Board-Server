@@ -47,3 +47,5 @@
 > JDK DynamicProxy를 활용한 로그 추적기 개발(23/11/28)
 > 
 > JDK DynamicProxy -> ProxyFactory 변경 로그 추적기 리팩토링(23/11/28)
+> 
+> Spring AOP 적용(어노테이션 생성, 어노테이션 적용 메소드 로그 추적 어드바이스 적용)(23/11/29) 

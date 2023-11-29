@@ -11,7 +11,7 @@ import practice.springmvc.domain.member.repository.MemberRepository;
 import java.util.Optional;
 
 @Slf4j
-@Repository
+//@Repository
 @Transactional
 public class JpaMemberRepositoryV1 implements MemberRepository {
 

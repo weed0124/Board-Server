@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Repository
+//@Repository
 @Transactional
 @RequiredArgsConstructor
 public class JpaBoardRepositoryV2 implements BoardRepository {

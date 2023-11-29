@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@Repository
+//@Repository
 public class MemoryBoardRepository implements BoardRepository {
 
     private static final Map<Long, Board> store = new ConcurrentHashMap<>();

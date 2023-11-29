@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.QBoard;
@@ -31,21 +32,25 @@ public class JpaBoardRepositoryV3 implements BoardRepository {
         this.query = new JPAQueryFactory(em);
     }
 
+    @Trace
     @Override
     public Board save(Board board) {
         return repository.save(board);
     }
 
+    @Trace
     @Override
     public Optional<Board> findById(Long id) {
         return repository.findById(id);
     }
 
+    @Trace
     @Override
     public List<Board> findAll() {
         return repository.findAll();
     }
 
+    @Trace
     @Override
     public List<Board> findAll(BoardSearchCond cond) {
         String nickname = cond.getNickname();
@@ -72,6 +77,7 @@ public class JpaBoardRepositoryV3 implements BoardRepository {
         return null;
     }
 
+    @Trace
     @Override
     public void update(Long boardId, Board updateParam) {
         Board findBoard = findById(boardId).orElseThrow();

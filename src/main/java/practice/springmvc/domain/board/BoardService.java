@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
@@ -30,22 +31,27 @@ public class BoardService {
     private final NotRecommendService notRecommendService;
     private final MemberService memberService;
 
+    @Trace
     public Board save(Board board) {
         return boardRepository.save(board);
     }
 
+    @Trace
     public Optional<Board> findById(Long id) {
         return boardRepository.findById(id);
     }
 
+    @Trace
     public List<Board> findAll() {
         return boardRepository.findAll();
     }
 
+    @Trace
     public List<Board> findAll(BoardSearchCond cond) {
         return boardRepository.findAll(cond);
     }
 
+    @Trace
     public void update(Long boardId, Board updateParam) {
         boardRepository.update(boardId, updateParam);
     }
@@ -61,6 +67,7 @@ public class BoardService {
     }
 
     // 작성자 IP와 같지 않은 경우 추천수 증가
+    @Trace
     public Board recommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         Period p = Period.between(LocalDate.now(), LocalDate.now());
@@ -82,6 +89,7 @@ public class BoardService {
     }
 
     // 작성자 IP와 같지 않은 경우 비추천수 증가
+    @Trace
     public Board notRecommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
@@ -102,6 +110,7 @@ public class BoardService {
         return board;
     }
 
+    @Trace
     public List<Board> bestBoards() {
         List<Board> boardList = findAll();
         return boardList.stream()

@@ -50,7 +50,8 @@ public class ProxyFactoryConfig {
 
     @Bean
     public BoardRepository boardRepository() {
-        return getLogAdviceProxy((BoardRepository) new JpaBoardRepositoryV3(springDataJpaBoardRepository, em));
+        return new JpaBoardRepositoryV3(springDataJpaBoardRepository, em);
+//        return getLogAdviceProxy((BoardRepository) new JpaBoardRepositoryV3(springDataJpaBoardRepository, em));
     }
 
     @Bean

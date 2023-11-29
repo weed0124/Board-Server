@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@Repository
+//@Repository
 public class MemoryMemberRepository implements MemberRepository {
     private static final Map<String, Member> store = new ConcurrentHashMap<>();
 
