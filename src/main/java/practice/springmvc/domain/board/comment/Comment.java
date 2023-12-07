@@ -13,16 +13,18 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "COMMENT_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "BOARD_ID")
     private Board board;
 
+    @Lob
     private String content;
     private LocalDateTime registDate;
 

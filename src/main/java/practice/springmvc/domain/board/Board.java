@@ -20,11 +20,15 @@ import java.util.Optional;
 public class Board {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BOARD_ID")
     private Long id;
     private String title;
+
+    @Lob
     private String content;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
     private LocalDateTime registDate;
     private LocalDateTime updateDate;

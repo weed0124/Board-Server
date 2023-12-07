@@ -14,14 +14,15 @@ import java.time.LocalDateTime;
 public class Recommend {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "RECOMMEND_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "BOARD_ID")
     private Board board;
 
     private LocalDateTime registDate;

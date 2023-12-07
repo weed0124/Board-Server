@@ -13,15 +13,16 @@ import java.time.LocalDateTime;
 public class NotRecommend {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "NOT_RECOMMEND_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
     private LocalDateTime registDate;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "BOARD_ID")
     private Board board;
 
 
