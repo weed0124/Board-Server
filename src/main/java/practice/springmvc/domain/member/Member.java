@@ -22,15 +22,6 @@ public class Member {
     private String address;
     private String ip;
 
-    @OneToMany(mappedBy = "member")
-    private List<Recommend> recommends;
-
-    @OneToMany(mappedBy = "member")
-    private List<NotRecommend> notRecommends;
-
-    @OneToMany(mappedBy = "member")
-    private List<Comment> comments;
-
     public Member() {
     }
 

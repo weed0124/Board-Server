@@ -27,7 +27,7 @@ public class Board {
     @Lob
     private String content;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
     private LocalDateTime registDate;
