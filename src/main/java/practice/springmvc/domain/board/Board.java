@@ -34,14 +34,29 @@ public class Board {
     private LocalDateTime updateDate;
     private int readCount;
 
-    @OneToMany(mappedBy = "board")
-    private List<Recommend> recommends;
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
+    private List<Recommend> recommends = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
-    private List<NotRecommend> notRecommends;
+    public void addRecommend(Recommend rec) {
+        recommends.add(rec);
+        rec.setBoard(this);
+    }
 
-    @OneToMany(mappedBy = "board")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
+    private List<NotRecommend> notRecommends = new ArrayList<>();
+
+    public void addNotRecommend(NotRecommend notRec) {
+        notRecommends.add(notRec);
+        notRec.setBoard(this);
+    }
+
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setBoard(this);
+    }
 
     public Board() {
     }
@@ -53,17 +68,14 @@ public class Board {
     }
 
     public int recommendsSize() {
-        List<Recommend> list = Optional.ofNullable(recommends).orElseGet(() -> new ArrayList<>());
-        return list.size();
+        return Optional.ofNullable(recommends).get().size();
     }
 
     public int notRecommendsSize() {
-        List<NotRecommend> list = Optional.ofNullable(notRecommends).orElseGet(() -> new ArrayList<>());
-        return list.size();
+        return Optional.ofNullable(notRecommends).get().size();
     }
 
     public int commentsSize() {
-        List<Comment> list = Optional.ofNullable(comments).orElseGet(() -> new ArrayList<>());
-        return list.size();
+        return Optional.ofNullable(comments).get().size();
     }
 }

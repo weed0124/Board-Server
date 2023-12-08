@@ -81,8 +81,7 @@ public class BoardService {
                 memberService.save(member);
                 Recommend recommend = new Recommend(board, member, LocalDateTime.now());
                 recommendService.save(recommend);
-                recommends.add(recommend);
-                board.setRecommends(recommends);
+                board.addRecommend(recommend);
             }
         }
         return board;
@@ -102,8 +101,7 @@ public class BoardService {
                 memberService.save(member);
                 NotRecommend notRecommend = new NotRecommend(board, member, LocalDateTime.now());
                 notRecommendService.save(notRecommend);
-                notRecommends.add(notRecommend);
-                board.setNotRecommends(notRecommends);
+                board.addNotRecommend(notRecommend);
             }
         }
 
