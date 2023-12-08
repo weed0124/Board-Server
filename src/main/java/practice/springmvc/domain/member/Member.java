@@ -22,13 +22,13 @@ public class Member {
     private String address;
     private String ip;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    @OneToMany(mappedBy = "member")
     private List<Recommend> recommends;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    @OneToMany(mappedBy = "member")
     private List<NotRecommend> notRecommends;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
     public Member() {
