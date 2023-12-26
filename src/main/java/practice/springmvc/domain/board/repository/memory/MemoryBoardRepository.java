@@ -31,11 +31,6 @@ public class MemoryBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> findAll() {
-        return new ArrayList<>(store.values());
-    }
-
-    @Override
     public List<Board> findAll(BoardSearchCond cond) {
         String title = cond.getTitle();
         String nickname = cond.getNickname();

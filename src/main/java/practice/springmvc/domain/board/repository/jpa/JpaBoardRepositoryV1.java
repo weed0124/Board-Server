@@ -38,13 +38,6 @@ public class JpaBoardRepositoryV1 implements BoardRepository {
     }
 
     @Override
-    public List<Board> findAll() {
-        String jpql = "select b from Board b";
-        TypedQuery<Board> query = em.createQuery(jpql, Board.class);
-        return query.getResultList();
-    }
-
-    @Override
     public List<Board> findAll(BoardSearchCond cond) {
         String title = cond.getTitle();
         String nickname = cond.getNickname();

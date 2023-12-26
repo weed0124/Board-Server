@@ -42,11 +42,6 @@ public class BoardService {
     }
 
     @Trace
-    public List<Board> findAll() {
-        return boardRepository.findAll();
-    }
-
-    @Trace
     public List<Board> findAll(BoardSearchCond cond) {
         return boardRepository.findAll(cond);
     }
@@ -110,7 +105,7 @@ public class BoardService {
 
     @Trace
     public List<Board> bestBoards() {
-        List<Board> boardList = findAll();
+        List<Board> boardList = findAll(new BoardSearchCond());
         return boardList.stream()
                 .filter(board -> board.getRecommends().size() >= 1)
                 .toList();

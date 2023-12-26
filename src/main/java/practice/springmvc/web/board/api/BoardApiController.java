@@ -6,13 +6,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.bridge.Message;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import practice.springmvc.domain.board.Board;
+import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,41 +30,21 @@ public class BoardApiController {
 
     @GetMapping("/boards/best")
     public ResponseEntity<Result> bestBoards() {
-        List<Board> boardList = boardService.findAll().stream()
+        List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
                 .filter(board -> board.getRecommends().size() >= 1)
-                .toList();
-        List<BoardApiDTO> collect = getBoardApiDTOS(boardList);
-        return ResponseEntity.ok(new Result(collect));
+                .map(BoardApiDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new Result(list));
     }
 
     @GetMapping("/boards/worst")
     public ResponseEntity<Result> worstBoards() {
-        List<Board> boardList = boardService.findAll().stream()
+        List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
                 .filter(board -> board.getNotRecommends().size() >= 1)
-                .toList();
-        List<BoardApiDTO> collect = getBoardApiDTOS(boardList);
-        return ResponseEntity.ok(new Result(collect));
-    }
-
-    private List<BoardApiDTO> getBoardApiDTOS(List<Board> boardList) {
-        List<BoardApiDTO> collect = boardList
-                .stream()
-                .map(board -> new BoardApiDTO(board.getId(),
-                        board.getTitle(),
-                        board.getContent(),
-                        board.getMember().getNickname(),
-                        board.getMember().getIp(),
-                        board.getRecommends().size(),
-                        board.getNotRecommends().size())).collect(Collectors.toList());
-        return collect;
-    }
-
-    public void update(Board board, BoardApiDTO boardApiDTO) {
-        boardApiDTO.setId(board.getId());
-        boardApiDTO.setTitle(board.getTitle());
-        boardApiDTO.setContent(board.getContent());
-        boardApiDTO.setIp(board.getMember().getIp());
-        boardApiDTO.setNickname(board.getMember().getNickname());
+                .map(BoardApiDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new Result(list));
     }
 
     @Getter @Setter
@@ -77,7 +61,17 @@ public class BoardApiController {
         String content;
         String nickname;
         String ip;
-        int recommendSize;
-        int notRecommendSize;
+        int recommendCount;
+        int notRecommendCount;
+
+        public BoardApiDTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.nickname = board.getMember().getNickname();
+            this.ip = board.getMember().getIp();
+            this.recommendCount = board.getRecommends().size();
+            this.notRecommendCount = board.getNotRecommends().size();
+        }
     }
 }

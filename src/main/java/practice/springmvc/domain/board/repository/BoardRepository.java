@@ -11,7 +11,6 @@ public interface BoardRepository {
 
     Optional<Board> findById(Long id);
 
-    List<Board> findAll();
     List<Board> findAll(BoardSearchCond cond);
 
     void update(Long boardId, Board updateParam);
