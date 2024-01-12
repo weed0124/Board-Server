@@ -2,15 +2,17 @@ package practice.springmvc.domain.board;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.RecommendService;
-import practice.springmvc.domain.board.repository.BoardRepository;
+import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
 import practice.springmvc.domain.member.Member;
 import practice.springmvc.domain.member.MemberService;
 
@@ -23,10 +25,11 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final BoardRepository boardRepository;
+    private final SpringDataJpaBoardRepository boardRepository;
     private final RecommendService recommendService;
     private final NotRecommendService notRecommendService;
     private final MemberService memberService;
@@ -43,22 +46,41 @@ public class BoardService {
 
     @Trace
     public List<Board> findAll(BoardSearchCond cond) {
-        return boardRepository.findAll(cond);
+        String title = cond.getTitle();
+        String nickname = cond.getNickname();
+        if (likeTitle(title) == null && likeNickname(nickname) == null) {
+            return boardRepository.findAll();
+        } else if (likeTitle(title) == null) {
+            return boardRepository.findByNicknameLike(nickname);
+        } else if (likeNickname(nickname) == null) {
+            return boardRepository.findByTitleLike(title);
+        } else {
+            return boardRepository.findBoards(title, nickname);
+        }
     }
 
     @Trace
     public void update(Long boardId, Board updateParam) {
-        boardRepository.update(boardId, updateParam);
+        Board findBoard = findById(boardId).orElseThrow();
+        findBoard.setTitle(updateParam.getTitle());
+        findBoard.setContent(updateParam.getContent());
+        findBoard.setUpdateDate(LocalDateTime.now());
     }
+
 
     // 작성자 IP와 같지 않은 경우 조회수 증가
     public Board addReadCount(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
-            boardRepository.addReadCount(board.getId());
+            addReadCount(board.getId());
         }
 
         return board;
+    }
+
+    private void addReadCount(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId).orElseThrow();
+        findBoard.setReadCount(findBoard.getReadCount() + 1);
     }
 
     // 작성자 IP와 같지 않은 경우 추천수 증가
@@ -71,7 +93,7 @@ public class BoardService {
             List<Recommend> oneDayRecommend = recommends.stream()
                     .filter(rec -> Period.between(rec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
-            if (oneDayRecommend.size() == 0) {
+            if (oneDayRecommend.isEmpty()) {
                 Member member = new Member(getRemoteIp(request));
                 memberService.save(member);
                 Recommend recommend = new Recommend(board, member, LocalDateTime.now());
@@ -91,7 +113,7 @@ public class BoardService {
             List<NotRecommend> oneDayNotRecommend = notRecommends.stream()
                     .filter(notRec -> Period.between(notRec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
-            if (oneDayNotRecommend.size() == 0) {
+            if (oneDayNotRecommend.isEmpty()) {
                 Member member = new Member(getRemoteIp(request));
                 memberService.save(member);
                 NotRecommend notRecommend = new NotRecommend(board, member, LocalDateTime.now());
@@ -101,6 +123,20 @@ public class BoardService {
         }
 
         return board;
+    }
+
+    private String likeTitle(String title) {
+        if (StringUtils.hasText(title)) {
+            return "%" + title + "%";
+        }
+        return null;
+    }
+
+    private String likeNickname(String nickname) {
+        if (StringUtils.hasText(nickname)) {
+            return "%" + nickname + "%";
+        }
+        return null;
     }
 
     @Trace
