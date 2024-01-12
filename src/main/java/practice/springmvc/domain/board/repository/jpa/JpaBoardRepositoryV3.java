@@ -20,7 +20,7 @@ import java.util.Optional;
 import static practice.springmvc.domain.board.QBoard.board;
 
 @Slf4j
-@Repository
+//@Repository
 @Transactional
 public class JpaBoardRepositoryV3 implements BoardRepository {
 
