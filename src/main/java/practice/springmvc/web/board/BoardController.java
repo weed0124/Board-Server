@@ -73,7 +73,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public String read(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findById(boardId).get();
+        Board findBoard = boardService.findById(boardId).orElseThrow();
         model.addAttribute("board", boardService.addReadCount(findBoard, request));
 
         return "boards/board";
@@ -81,31 +81,32 @@ public class BoardController {
 
     @GetMapping("/{boardId}/recommend")
     public String recommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findById(boardId).get();
+        Board findBoard = boardService.findById(boardId).orElseThrow();
         List<Recommend> findRecommends = findBoard.getRecommends();
         if (findRecommends != null) {
             model.addAttribute("board", boardService.recommend(findBoard, request));
         } else {
             model.addAttribute("board", findBoard);
         }
-        return "redirect:/board/{boardId}";
+
+        return "boards/board";
     }
 
     @GetMapping("/{boardId}/notrecommend")
     public String notRecommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findById(boardId).get();
+        Board findBoard = boardService.findById(boardId).orElseThrow();
         List<NotRecommend> findNotRecommends = findBoard.getNotRecommends();
         if (findNotRecommends != null) {
             model.addAttribute("board", boardService.notRecommend(findBoard, request));
         } else {
             model.addAttribute("board", findBoard);
         }
-        return "redirect:/board/{boardId}";
+        return "boards/board";
     }
 
     @GetMapping("/{boardId}/edit")
     public String editForm(@PathVariable Long boardId, Model model) {
-        Board editBoard = boardService.findById(boardId).get();
+        Board editBoard = boardService.findById(boardId).orElseThrow();
         model.addAttribute("board", editBoard);
         return "boards/editForm";
     }
@@ -113,7 +114,7 @@ public class BoardController {
     @PostMapping("/{boardId}/edit")
     public String edit(@PathVariable Long boardId, @ModelAttribute("board") BoardUpdateForm form, BindingResult bindingResult) {
         String passParam = form.getMember().getPassword();
-        String findPassword = boardService.findById(boardId).get().getMember().getPassword();
+        String findPassword = boardService.findById(boardId).orElseThrow().getMember().getPassword();
         if (!findPassword.equals(passParam)) {
             bindingResult.reject("loginFail", "비밀번호가 맞지 않습니다.");
         }
