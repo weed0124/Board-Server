@@ -27,7 +27,7 @@ import practice.springmvc.trace.logtrace.LogTrace;
 import java.lang.reflect.Proxy;
 
 @Slf4j
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class DynamicProxyConfig {
 
@@ -37,61 +37,61 @@ public class DynamicProxyConfig {
     private final EntityManager em;
     private final static String[] PATTERNS = {"save*", "find*", "update", "add*"};
 
-    @Bean
-    public BoardService boardService(LogTrace logTrace) {
-        return new BoardService(boardRepository(logTrace),
-                recommendService(logTrace),
-                notRecommendService(),
-                memberService(logTrace));
-    }
-
-    @Bean
-    public BoardRepository boardRepository(LogTrace logTrace) {
-        BoardRepository boardRepository = new JpaBoardRepositoryV3(springDataJpaBoardRepository, em);
-        BoardRepository proxy = (BoardRepository) Proxy.newProxyInstance(BoardRepository.class.getClassLoader(),
-                new Class[]{BoardRepository.class},
-                new LogTraceFilterHandler(boardRepository, logTrace, PATTERNS));
-
-        return proxy;
-    }
-
-    @Bean
-    public RecommendService recommendService(LogTrace logTrace) {
-        return new RecommendService(recommendRepository(logTrace));
-    }
-
-    @Bean
-    public RecommendRepository recommendRepository(LogTrace logTrace) {
-        RecommendRepository recommendRepository = new JpaRecommendRepositoryV2(springDataJpaRecommendRepository);
-        RecommendRepository proxy = (RecommendRepository) Proxy.newProxyInstance(RecommendRepository.class.getClassLoader(),
-                new Class[]{RecommendRepository.class},
-                new LogTraceFilterHandler(recommendRepository, logTrace, PATTERNS));
-
-        return proxy;
-    }
-
-    @Bean
-    public NotRecommendService notRecommendService() {
-        return new NotRecommendService(notRecommendRepository());
-    }
-
-    @Bean
-    public NotRecommendRepository notRecommendRepository() {
-        return new JpaNotRecommendRepositoryV1(em);
-    }
-
-    @Bean
-    public MemberService memberService(LogTrace logTrace) {
-        return new MemberService(memberRepository(logTrace));
-    }
-
-    @Bean
-    public MemberRepository memberRepository(LogTrace logTrace) {
-        MemberRepository memberRepository = new JpaMemberRepositoryV2(springDataJpaMemberRepository);
-        MemberRepository proxy = (MemberRepository) Proxy.newProxyInstance(MemberRepository.class.getClassLoader(),
-                new Class[]{MemberRepository.class},
-                new LogTraceFilterHandler(memberRepository, logTrace, PATTERNS));
-
-        return proxy;
-    }
+//    @Bean
+//    public BoardService boardService(LogTrace logTrace) {
+//        return new BoardService(boardRepository(logTrace),
+//                recommendService(logTrace),
+//                notRecommendService(),
+//                memberService(logTrace));
+//    }
+//
+//    @Bean
+//    public BoardRepository boardRepository(LogTrace logTrace) {
+//        BoardRepository boardRepository = new JpaBoardRepositoryV3(springDataJpaBoardRepository, em);
+//        BoardRepository proxy = (BoardRepository) Proxy.newProxyInstance(BoardRepository.class.getClassLoader(),
+//                new Class[]{BoardRepository.class},
+//                new LogTraceFilterHandler(boardRepository, logTrace, PATTERNS));
+//
+//        return proxy;
+//    }
+//
+//    @Bean
+//    public RecommendService recommendService(LogTrace logTrace) {
+//        return new RecommendService(recommendRepository(logTrace));
+//    }
+//
+//    @Bean
+//    public RecommendRepository recommendRepository(LogTrace logTrace) {
+//        RecommendRepository recommendRepository = new JpaRecommendRepositoryV2(springDataJpaRecommendRepository);
+//        RecommendRepository proxy = (RecommendRepository) Proxy.newProxyInstance(RecommendRepository.class.getClassLoader(),
+//                new Class[]{RecommendRepository.class},
+//                new LogTraceFilterHandler(recommendRepository, logTrace, PATTERNS));
+//
+//        return proxy;
+//    }
+//
+//    @Bean
+//    public NotRecommendService notRecommendService() {
+//        return new NotRecommendService(notRecommendRepository());
+//    }
+//
+//    @Bean
+//    public NotRecommendRepository notRecommendRepository() {
+//        return new JpaNotRecommendRepositoryV1(em);
+//    }
+//
+//    @Bean
+//    public MemberService memberService(LogTrace logTrace) {
+//        return new MemberService(memberRepository(logTrace));
+//    }
+//
+//    @Bean
+//    public MemberRepository memberRepository(LogTrace logTrace) {
+//        MemberRepository memberRepository = new JpaMemberRepositoryV2(springDataJpaMemberRepository);
+//        MemberRepository proxy = (MemberRepository) Proxy.newProxyInstance(MemberRepository.class.getClassLoader(),
+//                new Class[]{MemberRepository.class},
+//                new LogTraceFilterHandler(memberRepository, logTrace, PATTERNS));
+//
+//        return proxy;
+//    }
 }

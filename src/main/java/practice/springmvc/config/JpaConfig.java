@@ -17,49 +17,49 @@ import practice.springmvc.domain.member.MemberService;
 import practice.springmvc.domain.member.repository.jpa.JpaMemberRepositoryV1;
 import practice.springmvc.domain.member.repository.MemberRepository;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class JpaConfig {
 
     private final EntityManager em;
 
-    @Bean
-    public BoardService boardService() {
-        return new BoardService(boardRepository(), recommendService(), notRecommendService(), memberService());
-    }
-
-    @Bean
-    public BoardRepository boardRepository() {
-        return new JpaBoardRepositoryV1(em);
-    }
-
-    @Bean
-    public RecommendService recommendService() {
-        return new RecommendService(recommendRepository());
-    }
-
-    @Bean
-    public RecommendRepository recommendRepository() {
-        return new JpaRecommendRepositoryV1(em);
-    }
-
-    @Bean
-    public NotRecommendService notRecommendService() {
-        return new NotRecommendService(notRecommendRepository());
-    }
-
-    @Bean
-    public NotRecommendRepository notRecommendRepository() {
-        return new JpaNotRecommendRepositoryV1(em);
-    }
-
-    @Bean
-    public MemberService memberService() {
-        return new MemberService(memberRepository());
-    }
-
-    @Bean
-    public MemberRepository memberRepository() {
-        return new JpaMemberRepositoryV1(em);
-    }
+//    @Bean
+//    public BoardService boardService() {
+//        return new BoardService(boardRepository(), recommendService(), notRecommendService(), memberService());
+//    }
+//
+//    @Bean
+//    public BoardRepository boardRepository() {
+//        return new JpaBoardRepositoryV1(em);
+//    }
+//
+//    @Bean
+//    public RecommendService recommendService() {
+//        return new RecommendService(recommendRepository());
+//    }
+//
+//    @Bean
+//    public RecommendRepository recommendRepository() {
+//        return new JpaRecommendRepositoryV1(em);
+//    }
+//
+//    @Bean
+//    public NotRecommendService notRecommendService() {
+//        return new NotRecommendService(notRecommendRepository());
+//    }
+//
+//    @Bean
+//    public NotRecommendRepository notRecommendRepository() {
+//        return new JpaNotRecommendRepositoryV1(em);
+//    }
+//
+//    @Bean
+//    public MemberService memberService() {
+//        return new MemberService(memberRepository());
+//    }
+//
+//    @Bean
+//    public MemberRepository memberRepository() {
+//        return new JpaMemberRepositoryV1(em);
+//    }
 }

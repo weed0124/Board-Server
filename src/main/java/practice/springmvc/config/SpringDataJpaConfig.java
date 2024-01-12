@@ -21,7 +21,7 @@ import practice.springmvc.domain.member.repository.MemberRepository;
 import practice.springmvc.domain.member.repository.jpa.JpaMemberRepositoryV2;
 import practice.springmvc.domain.member.repository.jpa.SpringDataJpaMemberRepository;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class SpringDataJpaConfig {
 
@@ -29,44 +29,44 @@ public class SpringDataJpaConfig {
     private final SpringDataJpaMemberRepository springDataJpaMemberRepository;
     private final SpringDataJpaRecommendRepository springDataJpaRecommendRepository;
     private final EntityManager em;
-
-    @Bean
-    public BoardService boardService() {
-        return new BoardService(boardRepository(), recommendService(), notRecommendService(), memberService());
-    }
-
-    @Bean
-    public BoardRepository boardRepository() {
-        return new JpaBoardRepositoryV3(springDataJpaBoardRepository, em);
-    }
-
-    @Bean
-    public RecommendService recommendService() {
-        return new RecommendService(recommendRepository());
-    }
-
-    @Bean
-    public RecommendRepository recommendRepository() {
-        return new JpaRecommendRepositoryV2(springDataJpaRecommendRepository);
-    }
-
-    @Bean
-    public NotRecommendService notRecommendService() {
-        return new NotRecommendService(notRecommendRepository());
-    }
-
-    @Bean
-    public NotRecommendRepository notRecommendRepository() {
-        return new JpaNotRecommendRepositoryV1(em);
-    }
-
-    @Bean
-    public MemberService memberService() {
-        return new MemberService(memberRepository());
-    }
-
-    @Bean
-    public MemberRepository memberRepository() {
-        return new JpaMemberRepositoryV2(springDataJpaMemberRepository);
-    }
+//
+//    @Bean
+//    public BoardService boardService() {
+//        return new BoardService(boardRepository(), recommendService(), notRecommendService(), memberService());
+//    }
+//
+//    @Bean
+//    public BoardRepository boardRepository() {
+//        return new JpaBoardRepositoryV3(springDataJpaBoardRepository, em);
+//    }
+//
+//    @Bean
+//    public RecommendService recommendService() {
+//        return new RecommendService(recommendRepository());
+//    }
+//
+//    @Bean
+//    public RecommendRepository recommendRepository() {
+//        return new JpaRecommendRepositoryV2(springDataJpaRecommendRepository);
+//    }
+//
+//    @Bean
+//    public NotRecommendService notRecommendService() {
+//        return new NotRecommendService(notRecommendRepository());
+//    }
+//
+//    @Bean
+//    public NotRecommendRepository notRecommendRepository() {
+//        return new JpaNotRecommendRepositoryV1(em);
+//    }
+//
+//    @Bean
+//    public MemberService memberService() {
+//        return new MemberService(memberRepository());
+//    }
+//
+//    @Bean
+//    public MemberRepository memberRepository() {
+//        return new JpaMemberRepositoryV2(springDataJpaMemberRepository);
+//    }
 }
