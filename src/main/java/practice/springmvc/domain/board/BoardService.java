@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
@@ -46,17 +45,7 @@ public class BoardService {
 
     @Trace
     public List<Board> findAll(BoardSearchCond cond) {
-        String title = cond.getTitle();
-        String nickname = cond.getNickname();
-        if (likeTitle(title) == null && likeNickname(nickname) == null) {
-            return boardRepository.findAll();
-        } else if (likeTitle(title) == null) {
-            return boardRepository.findByNicknameLike(nickname);
-        } else if (likeNickname(nickname) == null) {
-            return boardRepository.findByTitleLike(title);
-        } else {
-            return boardRepository.findBoards(title, nickname);
-        }
+        return boardRepository.findBoardList(cond);
     }
 
     @Trace
@@ -123,20 +112,6 @@ public class BoardService {
         }
 
         return board;
-    }
-
-    private String likeTitle(String title) {
-        if (StringUtils.hasText(title)) {
-            return "%" + title + "%";
-        }
-        return null;
-    }
-
-    private String likeNickname(String nickname) {
-        if (StringUtils.hasText(nickname)) {
-            return "%" + nickname + "%";
-        }
-        return null;
     }
 
     @Trace
