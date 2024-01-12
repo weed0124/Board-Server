@@ -5,6 +5,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### QueryDSL 디렉토리 제외 ###
+/src/main/generated/
+
 ### STS ###
 .apt_generated
 .classpath
