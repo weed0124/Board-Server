@@ -68,14 +68,14 @@ public class Board {
     }
 
     public int recommendsSize() {
-        return Optional.ofNullable(recommends).get().size();
+        return recommends.size();
     }
 
     public int notRecommendsSize() {
-        return Optional.ofNullable(notRecommends).get().size();
+        return notRecommends.size();
     }
 
     public int commentsSize() {
-        return Optional.ofNullable(comments).get().size();
+        return comments.size();
     }
 }
