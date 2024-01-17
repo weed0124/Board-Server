@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.board.repository.BoardRepository;
+import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
 import practice.springmvc.domain.board.repository.memory.MemoryBoardRepository;
 import practice.springmvc.domain.member.Member;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -18,14 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 class BoardRepositoryTest {
 
     @Autowired
-    BoardRepository boardRepository;
-
-    @AfterEach
-    void afterEach() {
-        if (boardRepository instanceof MemoryBoardRepository) {
-            ((MemoryBoardRepository) boardRepository).clearStore();
-        }
-    }
+    SpringDataJpaBoardRepository boardRepository;
 
     @Test
     public void save() throws Exception {
@@ -63,7 +58,7 @@ class BoardRepositoryTest {
     }
 
     void test(String title, String nickname, Board... boards) {
-        List<Board> result = boardRepository.findAll(new BoardSearchCond(title, nickname));
+        List<Board> result = boardRepository.findBoardList(new BoardSearchCond(title, nickname));
         assertThat(result).containsExactly(boards);
     }
 
@@ -77,9 +72,10 @@ class BoardRepositoryTest {
 
         // when
         Board updateParam = new Board("board_edit", "content_edit", new Member("익명", "test", "127.0.0.1"));
-        boardRepository.update(id, updateParam);
-
-        Board findBoard = boardRepository.findById(id).get();
+        Board findBoard = boardRepository.findById(id).orElseThrow();
+        findBoard.setTitle(updateParam.getTitle());
+        findBoard.setContent(updateParam.getContent());
+        findBoard.setUpdateDate(LocalDateTime.now());
 
         // then
         assertThat(findBoard.getTitle()).isEqualTo(updateParam.getTitle());
