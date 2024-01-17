@@ -1,11 +1,17 @@
 package practice.springmvc.domain.board.repository.jpa;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
+import practice.springmvc.domain.board.dto.BoardDTO;
+import practice.springmvc.domain.board.dto.QBoardDTO;
 
 import java.util.List;
 
@@ -31,6 +37,34 @@ public class SpringDataJpaBoardRepositoryImpl implements BoardJPARepository {
                 .from(board)
                 .where(likeTitle(title), likeNickname(nickname))
                 .fetch();
+    }
+
+    @Override
+    public Page<BoardDTO> findPagingBoardList(BoardSearchCond cond, Pageable pageable) {
+        String title = cond.getTitle();
+        String nickname = cond.getNickname();
+
+        QueryResults<BoardDTO> results = query
+                .select(new QBoardDTO(
+                        board.id,
+                        board.title,
+                        board.member,
+                        board.registDate,
+                        board.updateDate,
+                        board.readCount,
+                        board.recommends.size(),
+                        board.notRecommends.size(),
+                        board.comments.size()
+                ))
+                .from(board)
+                .where(likeTitle(title), likeNickname(nickname))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<BoardDTO> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
     }
 
     private BooleanExpression likeTitle(String title) {
