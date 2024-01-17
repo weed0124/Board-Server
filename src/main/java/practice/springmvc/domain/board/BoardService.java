@@ -5,8 +5,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practice.springmvc.annotation.Trace;
+import practice.springmvc.domain.PageCustom;
+import practice.springmvc.domain.board.dto.BoardDTO;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
@@ -46,6 +50,12 @@ public class BoardService {
     @Trace
     public List<Board> findAll(BoardSearchCond cond) {
         return boardRepository.findBoardList(cond);
+    }
+
+    @Trace
+    public PageCustom<BoardDTO> findPagingAll(BoardSearchCond cond, Pageable pageable) {
+        Page<BoardDTO> page = boardRepository.findPagingBoardList(cond, pageable);
+        return new PageCustom<BoardDTO>(page.getContent(), page.getPageable(), page.getTotalElements());
     }
 
     @Trace

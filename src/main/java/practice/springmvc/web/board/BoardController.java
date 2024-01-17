@@ -4,14 +4,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import practice.springmvc.domain.PageCustom;
+import practice.springmvc.domain.PageableCustom;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
+import practice.springmvc.domain.board.dto.BoardDTO;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.member.Member;
@@ -31,9 +36,15 @@ public class BoardController {
     private final MessageSource ms;
 
     @GetMapping
-    public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model) {
-        List<Board> boardList = boardService.findAll(boardSearch);
-        model.addAttribute("boards", boardList);
+    public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model, @PageableDefault(size = 2) Pageable pageable) {
+        PageCustom<BoardDTO> boardList = boardService.findPagingAll(boardSearch, pageable);
+        PageableCustom page = boardList.getPageableCustom();
+
+        model.addAttribute("page", page.getPage());
+        model.addAttribute("size", page.getSize());
+        model.addAttribute("total", page.getTotal());
+        model.addAttribute("totalPage", page.getTotalPage());
+        model.addAttribute("boards", boardList.getContent());
         model.addAttribute("today", LocalDateTime.now());
         return "boards/boards";
     }
