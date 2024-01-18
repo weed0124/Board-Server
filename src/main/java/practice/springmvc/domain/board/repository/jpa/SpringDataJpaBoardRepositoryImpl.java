@@ -10,18 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
-import practice.springmvc.domain.board.comment.QComment;
 import practice.springmvc.domain.board.dto.BoardDTO;
 import practice.springmvc.domain.board.dto.QBoardDTO;
-import practice.springmvc.domain.board.notrecommend.QNotRecommend;
-import practice.springmvc.domain.board.recommend.QRecommend;
 
 import java.util.List;
 
 import static practice.springmvc.domain.board.QBoard.board;
-import static practice.springmvc.domain.board.comment.QComment.*;
-import static practice.springmvc.domain.board.notrecommend.QNotRecommend.*;
-import static practice.springmvc.domain.board.recommend.QRecommend.*;
 import static practice.springmvc.domain.member.QMember.member;
 
 public class SpringDataJpaBoardRepositoryImpl implements BoardJPARepository {
