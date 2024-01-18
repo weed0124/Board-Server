@@ -101,7 +101,7 @@
                 <tr th:each="comment : ${board.comments}">
                     <td th:text="${comment.member.nickname}">닉네임1</td>
                     <td th:text="${comment.content}">내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1</td>
-                    <td th:text="${comment.member.}" class="cmt_rgst_time">11.19 12:50:31</td>
+                    <td th:text="${comment.registDate}" class="cmt_rgst_time">11.19 12:50:31</td>
                 </tr>
             </tbody>
         </table>
