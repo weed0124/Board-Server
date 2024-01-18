@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Getter
