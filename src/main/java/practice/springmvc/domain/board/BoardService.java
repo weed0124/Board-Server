@@ -48,6 +48,11 @@ public class BoardService {
     }
 
     @Trace
+    public Board findBoardById(Long id) {
+        return boardRepository.findBoardById(id);
+    }
+
+    @Trace
     public List<Board> findAll(BoardSearchCond cond) {
         return boardRepository.findBoardList(cond);
     }
@@ -88,7 +93,7 @@ public class BoardService {
         boolean ownIp = isOwnIp(board, request);
         Period p = Period.between(LocalDate.now(), LocalDate.now());
         if (!ownIp) {
-            List<Recommend> recommends = Optional.ofNullable(board.getRecommends()).orElseGet(() -> new ArrayList<>());
+            List<Recommend> recommends = Optional.ofNullable(board.getRecommends()).orElseGet(ArrayList::new);
             List<Recommend> oneDayRecommend = recommends.stream()
                     .filter(rec -> Period.between(rec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
@@ -108,7 +113,7 @@ public class BoardService {
     public Board notRecommend(Board board, HttpServletRequest request) {
         boolean ownIp = isOwnIp(board, request);
         if (!ownIp) {
-            List<NotRecommend> notRecommends = Optional.ofNullable(board.getNotRecommends()).orElseGet(() -> new ArrayList<>());
+            List<NotRecommend> notRecommends = Optional.ofNullable(board.getNotRecommends()).orElseGet(ArrayList::new);
             List<NotRecommend> oneDayNotRecommend = notRecommends.stream()
                     .filter(notRec -> Period.between(notRec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
@@ -122,14 +127,6 @@ public class BoardService {
         }
 
         return board;
-    }
-
-    @Trace
-    public List<Board> bestBoards() {
-        List<Board> boardList = findAll(new BoardSearchCond());
-        return boardList.stream()
-                .filter(board -> board.getRecommends().size() >= 1)
-                .toList();
     }
 
     private boolean isOwnIp(Board board, HttpServletRequest request) {
@@ -146,7 +143,7 @@ public class BoardService {
         //웹로직 서버일 경우
         ip = Optional.ofNullable(ip).orElseGet(() -> request.getHeader("WL-Proxy-Client-IP"));
 
-        ip = Optional.ofNullable(ip).orElseGet(() -> request.getRemoteAddr());
+        ip = Optional.ofNullable(ip).orElseGet(request::getRemoteAddr);
 
         return ip;
     }

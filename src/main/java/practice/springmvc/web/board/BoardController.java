@@ -17,14 +17,11 @@ import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.dto.BoardDTO;
-import practice.springmvc.domain.board.notrecommend.NotRecommend;
-import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.member.Member;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -84,7 +81,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public String read(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findById(boardId).orElseThrow();
+        Board findBoard = boardService.findBoardById(boardId);
         model.addAttribute("board", boardService.addReadCount(findBoard, request));
 
         return "boards/board";
@@ -93,8 +90,7 @@ public class BoardController {
     @GetMapping("/{boardId}/recommend")
     public String recommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardService.findById(boardId).orElseThrow();
-        List<Recommend> findRecommends = findBoard.getRecommends();
-        if (findRecommends != null) {
+        if (!findBoard.getRecommends().isEmpty()) {
             model.addAttribute("board", boardService.recommend(findBoard, request));
         } else {
             model.addAttribute("board", findBoard);
@@ -106,8 +102,7 @@ public class BoardController {
     @GetMapping("/{boardId}/notrecommend")
     public String notRecommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardService.findById(boardId).orElseThrow();
-        List<NotRecommend> findNotRecommends = findBoard.getNotRecommends();
-        if (findNotRecommends != null) {
+        if (!findBoard.getNotRecommends().isEmpty()) {
             model.addAttribute("board", boardService.notRecommend(findBoard, request));
         } else {
             model.addAttribute("board", findBoard);
