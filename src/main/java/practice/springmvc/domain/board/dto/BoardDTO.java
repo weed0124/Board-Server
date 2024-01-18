@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 public class BoardDTO {
     private Long id;
     private String title;
-    private Member member;
+    private String nickname;
+    private String ip;
     private LocalDateTime registDate;
     private LocalDateTime updateDate;
     private int readCount;
@@ -22,10 +23,11 @@ public class BoardDTO {
     private int commentCount;
 
     @QueryProjection
-    public BoardDTO(Long id, String title, Member member, LocalDateTime registDate, LocalDateTime updateDate, int readCount, int recommendCount, int notRecommendCount, int commentCount) {
+    public BoardDTO(Long id, String title, String nickname, String ip, LocalDateTime registDate, LocalDateTime updateDate, int readCount, int recommendCount, int notRecommendCount, int commentCount) {
         this.id = id;
         this.title = title;
-        this.member = member;
+        this.nickname = nickname;
+        this.ip = ip;
         this.registDate = registDate;
         this.updateDate = updateDate;
         this.readCount = readCount;
