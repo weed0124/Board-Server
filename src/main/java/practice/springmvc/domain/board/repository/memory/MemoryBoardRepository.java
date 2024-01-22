@@ -61,7 +61,6 @@ public class MemoryBoardRepository implements BoardRepository {
         Board findBoard = findById(boardId).get();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
-        findBoard.setUpdateDate(LocalDateTime.now());
     }
 
     @Override

@@ -68,7 +68,6 @@ public class BoardService {
         Board findBoard = findById(boardId).orElseThrow();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
-        findBoard.setUpdateDate(LocalDateTime.now());
     }
 
 
@@ -95,12 +94,12 @@ public class BoardService {
         if (!ownIp) {
             List<Recommend> recommends = Optional.ofNullable(board.getRecommends()).orElseGet(ArrayList::new);
             List<Recommend> oneDayRecommend = recommends.stream()
-                    .filter(rec -> Period.between(rec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
+                    .filter(rec -> Period.between(rec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
             if (oneDayRecommend.isEmpty()) {
                 Member member = new Member(getRemoteIp(request));
                 memberService.save(member);
-                Recommend recommend = new Recommend(board, member, LocalDateTime.now());
+                Recommend recommend = new Recommend(board, member);
                 recommendService.save(recommend);
                 board.addRecommend(recommend);
             }
@@ -115,12 +114,12 @@ public class BoardService {
         if (!ownIp) {
             List<NotRecommend> notRecommends = Optional.ofNullable(board.getNotRecommends()).orElseGet(ArrayList::new);
             List<NotRecommend> oneDayNotRecommend = notRecommends.stream()
-                    .filter(notRec -> Period.between(notRec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0)
+                    .filter(notRec -> Period.between(notRec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
             if (oneDayNotRecommend.isEmpty()) {
                 Member member = new Member(getRemoteIp(request));
                 memberService.save(member);
-                NotRecommend notRecommend = new NotRecommend(board, member, LocalDateTime.now());
+                NotRecommend notRecommend = new NotRecommend(board, member);
                 notRecommendService.save(notRecommend);
                 board.addNotRecommend(notRecommend);
             }

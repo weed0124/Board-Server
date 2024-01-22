@@ -3,21 +3,18 @@ package practice.springmvc.domain.board;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 import practice.springmvc.domain.board.comment.Comment;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.recommend.Recommend;
+import practice.springmvc.domain.entity.BaseTimeEntity;
 import practice.springmvc.domain.member.Member;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
-@Component
 @Getter @Setter
-public class Board {
+public class Board extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
@@ -30,8 +27,6 @@ public class Board {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
-    private LocalDateTime registDate;
-    private LocalDateTime updateDate;
     private int readCount;
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)

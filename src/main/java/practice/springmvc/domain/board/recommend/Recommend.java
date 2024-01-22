@@ -1,17 +1,20 @@
 package practice.springmvc.domain.board.recommend;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import practice.springmvc.domain.board.Board;
+import practice.springmvc.domain.entity.BaseTimeEntity;
 import practice.springmvc.domain.member.Member;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-public class Recommend {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Recommend extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RECOMMEND_ID")
@@ -25,14 +28,8 @@ public class Recommend {
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
-    private LocalDateTime registDate;
-
-    public Recommend() {
-    }
-
-    public Recommend(Board board, Member member, LocalDateTime registDate) {
+    public Recommend(Board board, Member member) {
         this.board = board;
         this.member = member;
-        this.registDate = registDate;
     }
 }

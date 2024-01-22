@@ -1,6 +1,5 @@
 package practice.springmvc.domain.board.notrecommend.repository.memory;
 
-import org.springframework.stereotype.Repository;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
 
@@ -34,13 +33,13 @@ public class MemoryNotRecommendRepository implements NotRecommendRepository {
 //        Period p = Period.between(LocalDate.now(), LocalDate.now());
 //        return new ArrayList<>(store.values()).stream()
 //                .filter(nrec -> nrec.getBoardId() == boardId
-//                        && Period.between(nrec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
+//                        && Period.between(nrec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
 //    }
 
     @Override
     public List<NotRecommend> findByNickname(String nickname) {
         return new ArrayList<>(store.values()).stream()
                 .filter(nrec -> nrec.getMember().getNickname().equals(nickname)
-                        && Period.between(nrec.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
+                        && Period.between(nrec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
     }
 }

@@ -37,8 +37,8 @@
         <input type="text" id="nickname" name="nickname" class="form-control" value="작성자" th:value="${board.member.nickname}" readonly>
     </div>
     <div>
-        <label for="registDate" th:text="#{label.board.registDate}">게시글 작성일</label>
-        <input type="text" id="registDate" name="registDate" class="form-control" value="2023/11/14" th:value="${#temporals.format(board.registDate, 'yyyy.MM.dd HH:mm:ss')}" readonly>
+        <label for="createdDate" th:text="#{label.board.createdDate}">게시글 작성일</label>
+        <input type="text" id="createdDate" name="createdDate" class="form-control" value="2023/11/14" th:value="${#temporals.format(board.createdDate, 'yyyy.MM.dd HH:mm:ss')}" readonly>
     </div>
     <div>
         <label for="readCount" th:text="#{label.board.readCount}">게시글 조회수</label>
@@ -101,7 +101,7 @@
                 <tr th:each="comment : ${board.comments}">
                     <td th:text="${comment.member.nickname}">닉네임1</td>
                     <td th:text="${comment.content}">내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1내용1</td>
-                    <td th:text="${comment.registDate}" class="cmt_rgst_time">11.19 12:50:31</td>
+                    <td th:text="${comment.creatdDate}" class="cmt_rgst_time">11.19 12:50:31</td>
                 </tr>
             </tbody>
         </table>

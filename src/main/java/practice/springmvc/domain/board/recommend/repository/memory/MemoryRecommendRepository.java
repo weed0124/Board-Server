@@ -1,6 +1,5 @@
 package practice.springmvc.domain.board.recommend.repository.memory;
 
-import org.springframework.stereotype.Repository;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.repository.RecommendRepository;
 
@@ -34,13 +33,13 @@ public class MemoryRecommendRepository implements RecommendRepository {
 //        Period p = Period.between(LocalDate.now(), LocalDate.now());
 //        return new ArrayList<>(store.values()).stream()
 //                .filter(recommend -> recommend.getBoardId() == boardId
-//                        && Period.between(recommend.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
+//                        && Period.between(recommend.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
 //    }
 
     @Override
     public List<Recommend> findByNickname(String nickname) {
         return new ArrayList<>(store.values()).stream()
                 .filter(recommend -> recommend.getMember().getNickname().equals(nickname)
-                        && Period.between(recommend.getRegistDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
+                        && Period.between(recommend.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
     }
 }

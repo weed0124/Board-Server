@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import practice.springmvc.aop.TraceAspect;
 import practice.springmvc.config.ProxyFactoryConfig;
 import practice.springmvc.config.advice.LogTraceAdvice;
@@ -16,6 +17,7 @@ import practice.springmvc.trace.logtrace.ThreadLocalTrace;
 //@Import(DynamicProxyConfig.class)
 //@Import(ProxyFactoryConfig.class)
 @Import(TraceAspect.class)
+@EnableJpaAuditing
 @SpringBootApplication(scanBasePackages = {"practice.springmvc.domain", "practice.springmvc.web", "practice.springmvc.annotation", "practice.springmvc.aop"})
 public class SpringMvcApplication {
 

@@ -72,8 +72,6 @@ public class BoardController {
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
         board.setMember(new Member(form.getMember().getNickname(), form.getMember().getPassword(), boardService.getRemoteIp(request)));
-        board.setRegistDate(LocalDateTime.now());
-        board.setUpdateDate(LocalDateTime.now());
 
         boardService.save(board);
         return "redirect:/board";
@@ -90,23 +88,14 @@ public class BoardController {
     @GetMapping("/{boardId}/recommend")
     public String recommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardService.findById(boardId).orElseThrow();
-        if (!findBoard.getRecommends().isEmpty()) {
-            model.addAttribute("board", boardService.recommend(findBoard, request));
-        } else {
-            model.addAttribute("board", findBoard);
-        }
-
+        model.addAttribute("board", boardService.recommend(findBoard, request));
         return "boards/board";
     }
 
     @GetMapping("/{boardId}/notrecommend")
     public String notRecommend(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardService.findById(boardId).orElseThrow();
-        if (!findBoard.getNotRecommends().isEmpty()) {
-            model.addAttribute("board", boardService.notRecommend(findBoard, request));
-        } else {
-            model.addAttribute("board", findBoard);
-        }
+        model.addAttribute("board", boardService.notRecommend(findBoard, request));
         return "boards/board";
     }
 
@@ -133,7 +122,6 @@ public class BoardController {
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-        board.setUpdateDate(LocalDateTime.now());
 
         boardService.update(boardId, board);
         return "redirect:/board";

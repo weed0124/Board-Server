@@ -52,12 +52,10 @@ public class SpringDataJpaBoardRepositoryImpl implements BoardJPARepository {
                         board.title,
                         member.nickname,
                         member.ip,
-                        board.registDate,
-                        board.updateDate,
+                        board.createdDate,
                         board.readCount,
                         board.recommends.size(),
-                        board.notRecommends.size(),
-                        board.comments.size()
+                        board.notRecommends.size()
                 ))
                 .from(board)
                 .leftJoin(board.member, member)

@@ -56,7 +56,6 @@ public class JpaBoardRepositoryV2 implements BoardRepository {
         Board findBoard = repository.findById(boardId).orElseThrow();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
-        findBoard.setUpdateDate(LocalDateTime.now());
     }
 
     @Override

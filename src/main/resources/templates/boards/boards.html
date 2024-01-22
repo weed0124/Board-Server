@@ -45,7 +45,7 @@
                 <th th:text="#{label.board.id}">번호</th>
                 <th th:text="#{label.board.title}">제목</th>
                 <th th:text="#{label.board.writer}">쓰니</th>
-                <th th:text="#{label.board.registDate}">작성일자</th>
+                <th th:text="#{label.board.createdDate}">작성일자</th>
                 <th th:text="#{label.board.readCount}">조회수</th>
                 <th th:text="#{label.board.recommendCount}">추천수</th>
                 <th th:text="#{label.board.notRecommendCount}">비추천수</th>
@@ -56,8 +56,8 @@
                 <td th:text="${board.id}">번호</td>
                 <td><a href="board.html" th:href="@{|/board/${board.id}|}" th:text="${board.title}">제목</a></td>
                 <td th:text="|${board.nickname}(${board.ip})|">글쓴이</td>
-                <td th:if="|${#temporals.format(board.registDate, 'yyyyMMdd').equals(#temporals.format(today, 'yyyyMMdd'))}|" th:text="${#temporals.format(board.registDate, 'HH:mm')}">11:30</td>
-                <td th:unless="|${#temporals.format(board.registDate, 'yyyyMMdd').equals(#temporals.format(today, 'yyyyMMdd'))}|" th:text="${#temporals.format(board.registDate, 'yy/MM/dd')}">23/11/14</td>
+                <td th:if="|${#temporals.format(board.createdDate, 'yyyyMMdd').equals(#temporals.format(today, 'yyyyMMdd'))}|" th:text="${#temporals.format(board.createdDate, 'HH:mm')}">11:30</td>
+                <td th:unless="|${#temporals.format(board.createdDate, 'yyyyMMdd').equals(#temporals.format(today, 'yyyyMMdd'))}|" th:text="${#temporals.format(board.createdDate, 'yy/MM/dd')}">23/11/14</td>
                 <td th:text="${board.readCount}">0</td>
                 <td th:text="${board.recommendCount}">0</td>
                 <td th:text="${board.notRecommendCount}">0</td>
