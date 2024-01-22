@@ -48,11 +48,6 @@ public class BoardService {
     }
 
     @Trace
-    public Board findBoardById(Long id) {
-        return boardRepository.findBoardById(id);
-    }
-
-    @Trace
     public List<Board> findAll(BoardSearchCond cond) {
         return boardRepository.findBoardList(cond);
     }

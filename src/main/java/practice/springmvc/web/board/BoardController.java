@@ -79,7 +79,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public String read(@PathVariable Long boardId, Model model, HttpServletRequest request) {
-        Board findBoard = boardService.findBoardById(boardId);
+        Board findBoard = boardService.findById(boardId).orElseThrow();
         model.addAttribute("board", boardService.addReadCount(findBoard, request));
 
         return "boards/board";
