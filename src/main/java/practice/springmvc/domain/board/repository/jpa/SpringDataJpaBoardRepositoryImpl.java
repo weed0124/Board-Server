@@ -69,24 +69,6 @@ public class SpringDataJpaBoardRepositoryImpl implements BoardJPARepository {
         return new PageImpl<>(content, pageable, total);
     }
 
-    /**
-     * N+1 발생 문제 수정
-     * ToMany 관계가 여럿일 경우 fetchJoin 사용이 1개 이상 사용이 불가하므로
-     * 가장 많은 데이터가 담겨있는 테이블을 fetchJoin하여 가져오기로함
-     * 이 외에 BatchSize 조정으로 최적화 가능
-     * @param id
-     * @return
-     */
-    @Override
-    public Board findBoardById(Long id) {
-        return query.selectFrom(board)
-                .from(board)
-                .leftJoin(board.member, member).fetchJoin()
-                .leftJoin(board.recommends, recommend).fetchJoin()
-                .where(board.id.eq(id))
-                .fetchOne();
-    }
-
     private BooleanExpression likeTitle(String title) {
         if (StringUtils.hasText(title)) {
             return board.title.like("%" + title + "%");
