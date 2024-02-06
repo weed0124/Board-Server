@@ -4,12 +4,16 @@ package practice.springmvc.web.board.api;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import practice.springmvc.domain.PageCustom;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
+import practice.springmvc.domain.board.dto.BoardDTO;
 import practice.springmvc.domain.member.Member;
 import practice.springmvc.exception.PasswordInvalidException;
 import practice.springmvc.web.board.form.BoardUpdateForm;
@@ -26,7 +30,7 @@ public class BoardApiController {
 
     private final BoardService boardService;
 
-    @GetMapping("/boards/best")
+    @GetMapping("/best")
     public ResponseEntity<Result> bestBoards() {
         List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
                 .filter(board -> board.getRecommends().size() >= 1)
@@ -36,7 +40,7 @@ public class BoardApiController {
         return ResponseEntity.ok(new Result(list));
     }
 
-    @GetMapping("/boards/worst")
+    @GetMapping("/worst")
     public ResponseEntity<Result> worstBoards() {
         List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
                 .filter(board -> board.getNotRecommends().size() >= 1)
@@ -46,7 +50,7 @@ public class BoardApiController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Board> saveBoard(@RequestBody BoardWriteApiDTO boardWriteApiDTO, HttpServletRequest request) {
+    public ResponseEntity<Result> saveBoard(@RequestBody BoardWriteApiDTO boardWriteApiDTO, HttpServletRequest request) {
         Board board = boardService.save(new Board(boardWriteApiDTO.getTitle(),
                 boardWriteApiDTO.getContent(),
                 new Member(boardWriteApiDTO.getNickname(), boardWriteApiDTO.getPassword(), boardWriteApiDTO.getIp())));
@@ -59,13 +63,19 @@ public class BoardApiController {
         return ResponseEntity.created(location).build();
     }
 
+    @GetMapping
+    public ResponseEntity<Result> listBoard(@PageableDefault(size = 5) Pageable pageable) {
+        PageCustom<BoardDTO> boardList = boardService.findPagingAll(new BoardSearchCond(), pageable);
+        return ResponseEntity.ok(new Result(boardList.getContent().stream().map(BoardApiDTO::new).toList()));
+    }
+
     @GetMapping("{id}")
-    public BoardApiDTO readBoard(@PathVariable Long id) {
-        return new BoardApiDTO(boardService.findById(id).orElseThrow());
+    public ResponseEntity<Result> readBoard(@PathVariable Long id) {
+        return ResponseEntity.ok(new Result(new BoardApiDTO(boardService.findById(id).orElseThrow())));
     }
 
     @PutMapping("{id}")
-    public BoardApiDTO editBoard(@PathVariable Long id, @RequestBody BoardUpdateForm form) {
+    public ResponseEntity<Result> editBoard(@PathVariable Long id, @RequestBody BoardUpdateForm form) {
         Board board = boardService.findById(id).orElseThrow();
 
         String password = form.getMember().getPassword();
@@ -78,7 +88,7 @@ public class BoardApiController {
         board.setMember(form.getMember());
 
         boardService.update(board.getId(), board);
-        return new BoardApiDTO(board);
+        return ResponseEntity.ok(new Result(new BoardApiDTO(board)));
     }
 
     @Getter
@@ -108,6 +118,16 @@ public class BoardApiController {
             this.ip = board.getMember().getIp();
             this.recommendCount = board.getRecommends().size();
             this.notRecommendCount = board.getNotRecommends().size();
+        }
+
+        public BoardApiDTO(BoardDTO boardDTO) {
+            this.id = boardDTO.getId();
+            this.title = boardDTO.getTitle();
+            this.content = boardDTO.getContent();
+            this.nickname = boardDTO.getNickname();
+            this.ip = boardDTO.getIp();
+            this.recommendCount = boardDTO.getRecommendCount();
+            this.notRecommendCount = boardDTO.getNotRecommendCount();
         }
     }
 
