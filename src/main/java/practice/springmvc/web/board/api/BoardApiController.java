@@ -11,6 +11,8 @@ import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.member.Member;
+import practice.springmvc.exception.PasswordInvalidException;
+import practice.springmvc.web.board.form.BoardUpdateForm;
 
 import java.net.URI;
 import java.util.List;
@@ -60,6 +62,23 @@ public class BoardApiController {
     @GetMapping("{id}")
     public BoardApiDTO readBoard(@PathVariable Long id) {
         return new BoardApiDTO(boardService.findById(id).orElseThrow());
+    }
+
+    @PutMapping("{id}")
+    public BoardApiDTO editBoard(@PathVariable Long id, @RequestBody BoardUpdateForm form) {
+        Board board = boardService.findById(id).orElseThrow();
+
+        String password = form.getMember().getPassword();
+        if (!board.getMember().getPassword().equals(password)) {
+            throw new PasswordInvalidException("비밀번호가 맞지 않습니다.");
+        }
+
+        board.setTitle(form.getTitle());
+        board.setContent(form.getContent());
+        board.setMember(form.getMember());
+
+        boardService.update(board.getId(), board);
+        return new BoardApiDTO(board);
     }
 
     @Getter
