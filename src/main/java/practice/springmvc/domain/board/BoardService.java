@@ -53,6 +53,11 @@ public class BoardService {
     }
 
     @Trace
+    public Page<BoardDTO> findPagingAllV2(BoardSearchCond cond, Pageable pageable) {
+        return boardRepository.findPagingBoardList(cond, pageable);
+    }
+
+    @Trace
     public PageCustom<BoardDTO> findPagingAll(BoardSearchCond cond, Pageable pageable) {
         Page<BoardDTO> page = boardRepository.findPagingBoardList(cond, pageable);
         return new PageCustom<BoardDTO>(page.getContent(), page.getPageable(), page.getTotalElements());

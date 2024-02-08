@@ -4,14 +4,17 @@ package practice.springmvc.web.board.api;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import practice.springmvc.domain.PageCustom;
+import practice.springmvc.domain.PagedModelUtil;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
@@ -35,6 +38,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class BoardApiController {
 
     private final BoardService boardService;
+    private final PagedResourcesAssembler assembler;
 
     @GetMapping("/best")
     public ResponseEntity<EntityModel<Result>> bestBoards() {
@@ -81,19 +85,14 @@ public class BoardApiController {
     }
 
     @GetMapping
-    public ResponseEntity<EntityModel<Result>> listBoard(@PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
-        PageCustom<BoardDTO> boardList = boardService.findPagingAll(new BoardSearchCond(), pageable);
+    public ResponseEntity<PagedModel<EntityModel<BoardDTO>>> listBoard(@PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
+        Page<BoardDTO> boardList = boardService.findPagingAllV2(new BoardSearchCond(), pageable);
 
-        List<EntityModel<BoardDTO>> list = boardList.getContent().stream().map(b -> {
-            return EntityModel.of(b).add(linkTo(methodOn(BoardApiController.class).readBoard(b.getId(), request)).withRel("detail"));
-        }).toList();
-
-        EntityModel<Result> entityModel = EntityModel.of(new Result<>(list));
-        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).listBoard(pageable, request));
-        entityModel.add(linkTo.withSelfRel())
-                    .add(linkTo(HomeController.class).withRel("home"));
-
-        return ResponseEntity.ok().body(entityModel);
+        PagedModel<EntityModel<BoardDTO>> entityModels = PagedModelUtil.getEntityModels(assembler,
+                boardList,
+                linkTo(methodOn(this.getClass()).listBoard(null, request)),
+                BoardDTO::getId);
+        return ResponseEntity.ok().body(entityModels);
     }
 
     @GetMapping("{id}")
