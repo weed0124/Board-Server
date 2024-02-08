@@ -65,6 +65,11 @@ public class BoardService {
         findBoard.setContent(updateParam.getContent());
     }
 
+    @Trace
+    public void delete(Long boardId) {
+        boardRepository.deleteById(boardId);
+    }
+
 
     // 작성자 IP와 같지 않은 경우 조회수 증가
     public Board addReadCount(Board board, HttpServletRequest request) {
