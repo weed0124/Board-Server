@@ -1,0 +1,57 @@
+management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-components: always
+  server:
+    port: 8080
+#      show-details: always
+
+info:
+  app:
+    name: spring-webapp
+    company: du
+
+spring:
+  messages:
+    basename: messages, errors
+  main:
+    allow-bean-definition-overriding: true # SpringBoot 2.1 부터 Bean Overriding Default값이 비활성화 되어 있어 활성화 처리 필요
+  jpa:
+    hibernate:
+      ddl-auto: update # JPA Auto DDL 설정 -> 개발 초기 참고용으로 사용
+    properties:
+      hibernate:
+        format_sql: true
+  # DB Info
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+
+# JPA Log
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
