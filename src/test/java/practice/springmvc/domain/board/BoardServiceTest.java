@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
-import practice.springmvc.domain.member.Member;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -22,11 +21,11 @@ class BoardServiceTest {
 
         Board board = new Board("title"
                 , "content"
-                , new Member("익명", "test", "127.0.0.1"));
+                , "익명", "test", "127.0.0.1");
 
         Board board2 = new Board("title"
                 , "content"
-                , new Member("익명", "test", "127.127.0.1"));
+                , "익명", "test", "127.127.0.1");
 
         Board saveBoard = boardService.save(board);
         Board saveBoard2 = boardService.save(board2);
@@ -45,11 +44,11 @@ class BoardServiceTest {
 
         Board board = new Board("title"
                 , "content"
-                , new Member("익명", "test", "127.0.0.1"));
+                , "익명", "test", "127.0.0.1");
 
         Board board2 = new Board("title"
                 , "content"
-                , new Member("익명", "test", "127.127.0.1"));
+                , "익명", "test", "127.127.0.1");
 
         Board saveBoard = boardService.save(board);
         Board saveBoard2 = boardService.save(board2);
@@ -68,11 +67,11 @@ class BoardServiceTest {
 
         Board board = new Board("title"
                 , "content"
-                , new Member("익명", "test", "127.0.0.1"));
+                , "익명", "test", "127.0.0.1");
 
         Board board2 = new Board("title"
                 , "content"
-                , new Member("익명", "test", "127.127.0.1"));
+                , "익명", "test", "127.127.0.1");
 
         Board saveBoard = boardService.save(board);
         Board saveBoard2 = boardService.save(board2);

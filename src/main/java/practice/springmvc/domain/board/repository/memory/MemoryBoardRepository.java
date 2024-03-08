@@ -1,13 +1,11 @@
 package practice.springmvc.domain.board.repository.memory;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.repository.BoardRepository;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,7 +36,7 @@ public class MemoryBoardRepository implements BoardRepository {
         if (StringUtils.hasText(title) && StringUtils.hasText(nickname)) {
             return new ArrayList<>(store.values()
                     .stream()
-                    .filter(board -> board.getMember().getNickname().equals(nickname)
+                    .filter(board -> board.getNickname().equals(nickname)
                             && board.getTitle().equals(title))
                     .toList());
         } else if (StringUtils.hasText(title)) {
@@ -49,7 +47,7 @@ public class MemoryBoardRepository implements BoardRepository {
         } else if (StringUtils.hasText(nickname)) {
             return new ArrayList<>(store.values()
                     .stream()
-                    .filter(board -> board.getMember().getNickname().equals(nickname))
+                    .filter(board -> board.getNickname().equals(nickname))
                     .toList());
         } else {
             return new ArrayList<>(store.values());

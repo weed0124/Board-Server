@@ -10,9 +10,9 @@ import java.util.List;
 public interface SpringDataJpaBoardRepository extends JpaRepository<Board, Long>, BoardJPARepository {
     List<Board> findByTitleLike(String title);
 
-    @Query("select b from Board b join fetch b.member m where m.nickname like :nickname")
+    @Query("select b from Board b where b.nickname like :nickname")
     List<Board> findByNicknameLike(@Param("nickname") String nickname);
 
-    @Query("select b from Board b join fetch b.member m where b.title like :title and m.nickname like :nickname")
+    @Query("select b from Board b where b.title like :title and b.nickname like :nickname")
     List<Board> findBoards(@Param("title") String title, @Param("nickname") String nickname);
 }

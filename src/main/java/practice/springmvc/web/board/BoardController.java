@@ -50,16 +50,14 @@ public class BoardController {
     @GetMapping("/add")
     public String addForm(Model model) {
         Board board = new Board();
-        Member member = new Member();
-        member.setNickname(ms.getMessage("board.default.writer", null, null));
-        board.setMember(member);
+        board.setNickname(ms.getMessage("board.default.writer", null, null));
         model.addAttribute("board", board);
         return "boards/addForm";
     }
 
     @PostMapping("/add")
     public String saveForm(@Validated @ModelAttribute("board") BoardSaveForm form, HttpServletRequest request, BindingResult bindingResult) {
-        String password = form.getMember().getPassword();
+        String password = form.getPassword();
         if (password.length() < 4 || password.length() > 12) {
             bindingResult.reject("password.size", new Object[]{4, 12}, null);
         }
@@ -72,7 +70,9 @@ public class BoardController {
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-        board.setMember(new Member(form.getMember().getNickname(), SHA256Util.encryptSHA256(form.getMember().getPassword()), boardService.getRemoteIp(request)));
+        board.setNickname(form.getNickname());
+        board.setPassword(SHA256Util.encryptSHA256(form.getPassword()));
+        board.setIp(boardService.getRemoteIp(request));
 
         boardService.save(board);
         return "redirect:/board";
@@ -108,9 +108,9 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/edit")
-    public String edit(@PathVariable Long boardId, @ModelAttribute("board") BoardUpdateForm form, BindingResult bindingResult) {
-        String passParam = SHA256Util.encryptSHA256(form.getMember().getPassword());
-        String findPassword = boardService.findById(boardId).orElseThrow().getMember().getPassword();
+    public String edit(@PathVariable Long boardId, @ModelAttribute("board") BoardUpdateForm form, BindingResult bindingResult, HttpServletRequest request) {
+        String passParam = SHA256Util.encryptSHA256(form.getPassword());
+        String findPassword = boardService.findById(boardId).orElseThrow().getPassword();
         if (!findPassword.equals(passParam)) {
             bindingResult.reject("loginFail", "비밀번호가 맞지 않습니다.");
         }
@@ -123,6 +123,9 @@ public class BoardController {
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
+        board.setNickname(form.getNickname());
+        board.setPassword(SHA256Util.encryptSHA256(form.getPassword()));
+        board.setIp(boardService.getRemoteIp(request));
 
         boardService.update(boardId, board);
         return "redirect:/board";

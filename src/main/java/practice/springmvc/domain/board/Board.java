@@ -7,7 +7,6 @@ import practice.springmvc.domain.board.comment.Comment;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.entity.BaseTimeEntity;
-import practice.springmvc.domain.member.Member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +23,9 @@ public class Board extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    private String nickname;
+    private String password;
+    private String ip;
     private int readCount;
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
@@ -56,10 +55,12 @@ public class Board extends BaseTimeEntity {
     public Board() {
     }
 
-    public Board(String title, String content, Member member) {
+    public Board(String title, String content, String nickname, String password, String ip) {
         this.title = title;
         this.content = content;
-        this.member = member;
+        this.nickname = nickname;
+        this.password = password;
+        this.ip = ip;
     }
 
     public int recommendsSize() {

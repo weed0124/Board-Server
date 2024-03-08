@@ -16,8 +16,6 @@ import practice.springmvc.domain.board.dto.QBoardDTO;
 import java.util.List;
 
 import static practice.springmvc.domain.board.QBoard.board;
-import static practice.springmvc.domain.board.recommend.QRecommend.*;
-import static practice.springmvc.domain.member.QMember.member;
 
 public class SpringDataJpaBoardRepositoryImpl implements BoardJPARepository {
 
@@ -50,15 +48,14 @@ public class SpringDataJpaBoardRepositoryImpl implements BoardJPARepository {
                 .select(new QBoardDTO(
                         board.id,
                         board.title,
-                        member.nickname,
-                        member.ip,
+                        board.nickname,
+                        board.ip,
                         board.createdDate,
                         board.readCount,
                         board.recommends.size(),
                         board.notRecommends.size()
                 ))
                 .from(board)
-                .leftJoin(board.member, member)
                 .where(likeTitle(title), likeNickname(nickname))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -78,7 +75,7 @@ public class SpringDataJpaBoardRepositoryImpl implements BoardJPARepository {
 
     private BooleanExpression likeNickname(String nickname) {
         if (StringUtils.hasText(nickname)) {
-            return board.member.nickname.like("%" + nickname + "%");
+            return board.nickname.like("%" + nickname + "%");
         }
         return null;
     }

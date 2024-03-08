@@ -74,7 +74,7 @@ public class BoardApiController {
     public ResponseEntity<Result> saveBoard(@RequestBody BoardWriteApiDTO boardWriteApiDTO, HttpServletRequest request) {
         Board board = boardService.save(new Board(boardWriteApiDTO.getTitle(),
                 boardWriteApiDTO.getContent(),
-                new Member(boardWriteApiDTO.getNickname(), boardWriteApiDTO.getPassword(), boardWriteApiDTO.getIp())));
+                boardWriteApiDTO.getNickname(), boardWriteApiDTO.getPassword(), boardWriteApiDTO.getIp()));
 
         URI location = ServletUriComponentsBuilder.fromContextPath(request)
                 .path("/api/board/{id}")
@@ -111,14 +111,13 @@ public class BoardApiController {
     public ResponseEntity<Result> editBoard(@PathVariable Long id, @RequestBody BoardUpdateForm form) {
         Board board = boardService.findById(id).orElseThrow();
 
-        String password = form.getMember().getPassword();
-        if (!board.getMember().getPassword().equals(password)) {
+        String password = form.getPassword();
+        if (!board.getPassword().equals(password)) {
             throw new PasswordInvalidException("비밀번호가 맞지 않습니다.");
         }
 
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-        board.setMember(form.getMember());
 
         boardService.update(board.getId(), board);
         return ResponseEntity.ok(new Result(new BoardApiDTO(board)));
@@ -162,8 +161,8 @@ public class BoardApiController {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
-            this.nickname = board.getMember().getNickname();
-            this.ip = board.getMember().getIp();
+            this.nickname = board.getNickname();
+            this.ip = board.getIp();
             this.recommendCount = board.getRecommends().size();
             this.notRecommendCount = board.getNotRecommends().size();
         }

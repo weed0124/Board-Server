@@ -7,9 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.member.repository.MemberRepository;
 import practice.springmvc.domain.member.repository.memory.MemoryMemberRepository;
-import practice.springmvc.utils.SHA256Util;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,7 +27,7 @@ class MemberRepositoryTest {
     @Test
     public void save() throws Exception {
         // given
-        Member member = new Member("익명", "test", "127.0.0.1");
+        Member member = new Member("익명", "test");
 
         // when
         Member saveMember = memberRepository.save(member);

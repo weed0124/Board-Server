@@ -20,7 +20,6 @@ import practice.springmvc.domain.member.Member;
 import practice.springmvc.domain.member.MemberService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +67,9 @@ public class BoardService {
         Board findBoard = findById(boardId).orElseThrow();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
+        findBoard.setNickname(updateParam.getNickname());
+        findBoard.setPassword(updateParam.getPassword());
+        findBoard.setIp(updateParam.getIp());
     }
 
     @Trace
@@ -135,7 +137,7 @@ public class BoardService {
 
     private boolean isOwnIp(Board board, HttpServletRequest request) {
         String remoteIp = getRemoteIp(request);
-        return board.getMember().getIp().equals(remoteIp);
+        return board.getIp().equals(remoteIp);
     }
 
     // IP 조회

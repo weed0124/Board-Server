@@ -36,12 +36,12 @@
                    class="form-control" placeholder="제목을 입력하세요">
         </div>
         <div>
-            <input type="text" id="nickname" th:field="*{member.nickname}" class="form-control">
+            <input type="text" id="nickname" th:field="*{nickname}" class="form-control">
         </div>
         <div>
-            <input type="password" id="password" th:field="*{member.password}"
+            <input type="password" id="password" th:field="*{password}"
                    th:errorclass="field-error" class="form-control">
-            <div class="field-error" th:errors="*{member.password}">
+            <div class="field-error" th:errors="*{password}">
                 패스워드 오류
             </div>
         </div>

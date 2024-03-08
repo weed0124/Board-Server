@@ -9,5 +9,7 @@ public class BoardSaveForm {
 
     private String title;
     private String content;
-    private Member member;
+    private String nickname;
+    private String password;
+    private String ip;
 }

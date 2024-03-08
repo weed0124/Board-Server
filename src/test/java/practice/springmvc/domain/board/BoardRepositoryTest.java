@@ -25,7 +25,7 @@ class BoardRepositoryTest {
     @Test
     public void save() throws Exception {
         // given
-        Board board = new Board("board", "content", new Member("익명", "test", "127.0.0.1"));
+        Board board = new Board("board", "content", "익명", "test", "127.0.0.1");
 
         // when
         Board saveBoard = boardRepository.save(board);
@@ -39,8 +39,8 @@ class BoardRepositoryTest {
     @Test
     public void findBoards() throws Exception {
         // given
-        Board board1 = new Board("board1", "content1", new Member("익명1", "test", "127.0.0.1"));
-        Board board2 = new Board("board2", "content2", new Member("익명2", "test2", "127.0.0.1"));
+        Board board1 = new Board("board1", "content1", "익명1", "test", "127.0.0.1");
+        Board board2 = new Board("board2", "content2", "익명2", "test2", "127.0.0.1");
 
         boardRepository.save(board1);
         boardRepository.save(board2);
@@ -65,13 +65,13 @@ class BoardRepositoryTest {
     @Test
     public void update() throws Exception {
         // given
-        Board board = new Board("board", "content", new Member("익명", "test", "127.0.0.1"));
+        Board board = new Board("board", "content", "익명", "test", "127.0.0.1");
 
         Board saveBoard = boardRepository.save(board);
         Long id = saveBoard.getId();
 
         // when
-        Board updateParam = new Board("board_edit", "content_edit", new Member("익명", "test", "127.0.0.1"));
+        Board updateParam = new Board("board_edit", "content_edit", "익명", "test", "127.0.0.1");
         Board findBoard = boardRepository.findById(id).orElseThrow();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
