@@ -18,6 +18,7 @@ import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.dto.BoardDTO;
 import practice.springmvc.domain.member.Member;
+import practice.springmvc.utils.SHA256Util;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
 
@@ -71,7 +72,7 @@ public class BoardController {
         Board board = new Board();
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
-        board.setMember(new Member(form.getMember().getNickname(), form.getMember().getPassword(), boardService.getRemoteIp(request)));
+        board.setMember(new Member(form.getMember().getNickname(), SHA256Util.encryptSHA256(form.getMember().getPassword()), boardService.getRemoteIp(request)));
 
         boardService.save(board);
         return "redirect:/board";
@@ -108,7 +109,7 @@ public class BoardController {
 
     @PostMapping("/{boardId}/edit")
     public String edit(@PathVariable Long boardId, @ModelAttribute("board") BoardUpdateForm form, BindingResult bindingResult) {
-        String passParam = form.getMember().getPassword();
+        String passParam = SHA256Util.encryptSHA256(form.getMember().getPassword());
         String findPassword = boardService.findById(boardId).orElseThrow().getMember().getPassword();
         if (!findPassword.equals(passParam)) {
             bindingResult.reject("loginFail", "비밀번호가 맞지 않습니다.");

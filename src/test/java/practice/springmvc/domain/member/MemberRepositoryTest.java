@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.member.repository.MemberRepository;
 import practice.springmvc.domain.member.repository.memory.MemoryMemberRepository;
+import practice.springmvc.utils.SHA256Util;
 
 import java.util.Optional;
 

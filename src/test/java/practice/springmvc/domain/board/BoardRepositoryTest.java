@@ -75,7 +75,6 @@ class BoardRepositoryTest {
         Board findBoard = boardRepository.findById(id).orElseThrow();
         findBoard.setTitle(updateParam.getTitle());
         findBoard.setContent(updateParam.getContent());
-        findBoard.setUpdateDate(LocalDateTime.now());
 
         // then
         assertThat(findBoard.getTitle()).isEqualTo(updateParam.getTitle());
