@@ -9,7 +9,7 @@
 > Spring-MVC 패턴 및 SpringBoot, JPA 기능 습득 및 활용이 목적이므로 디자인은 최대한 단순하게 사용 또는 Rest API로 사용 예정
 
 ### 개발환경
-> Java 17, SpringBoot v3.1.5, JPA, QueryDSL, MySQL, Redis, Docker, AWS EC2
+> Java 17, SpringBoot v3.1.5, JPA, QueryDSL, MySQL, Redis, Docker, AWS EC2, Locust
 
 ### 프로그램 주요 기능
     - 게시판
