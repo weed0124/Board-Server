@@ -66,7 +66,7 @@ public class JpaBoardRepositoryV3 implements BoardRepository {
 
     private BooleanExpression likeNickname(String nickname) {
         if (StringUtils.hasText(nickname)) {
-            return board.member.nickname.like("%" + nickname + "%");
+            return board.nickname.like("%" + nickname + "%");
         }
         return null;
     }

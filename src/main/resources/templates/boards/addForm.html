@@ -31,7 +31,6 @@
             <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
         </div>
         <div>
-            <label for="title" th:text="#{label.board.title}">게시글 제목</label>
             <input type="text" id="title" th:field="*{title}"
                    class="form-control" placeholder="제목을 입력하세요">
         </div>
