@@ -5,11 +5,12 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardDTO {
+public class BoardDTO implements Serializable {
     private Long id;
     private String title;
     private String content;

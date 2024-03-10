@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class BoardService {
         return boardRepository.findBoardList(cond);
     }
 
+    @Cacheable(value = "findPagingAllV2", key = "'findPagingAllV2' + #cond.getTitle()")
     @Trace
     public Page<BoardDTO> findPagingAllV2(BoardSearchCond cond, Pageable pageable) {
         return boardRepository.findPagingBoardList(cond, pageable);

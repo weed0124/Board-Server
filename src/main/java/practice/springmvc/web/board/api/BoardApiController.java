@@ -85,12 +85,12 @@ public class BoardApiController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<BoardDTO>>> listBoard(@PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
-        Page<BoardDTO> boardList = boardService.findPagingAllV2(new BoardSearchCond(), pageable);
+    public ResponseEntity<PagedModel<EntityModel<BoardDTO>>> listBoard(@RequestBody BoardSearchCond cond, @PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
+        Page<BoardDTO> boardList = boardService.findPagingAllV2(cond, pageable);
 
         PagedModel<EntityModel<BoardDTO>> entityModels = PagedModelUtil.getEntityModels(assembler,
                 boardList,
-                linkTo(methodOn(this.getClass()).listBoard(null, request)),
+                linkTo(methodOn(this.getClass()).listBoard(cond, null, request)),
                 BoardDTO::getId);
         return ResponseEntity.ok().body(entityModels);
     }
