@@ -29,21 +29,29 @@ spring:
     allow-bean-definition-overriding: true # SpringBoot 2.1 부터 Bean Overriding Default값이 비활성화 되어 있어 활성화 처리 필요
   jpa:
     hibernate:
-      ddl-auto: update # JPA Auto DDL 설정 -> 개발 초기 참고용으로 사용
+      ddl-auto: validate # JPA Auto DDL 설정 -> 개발 초기 참고용으로 사용
     properties:
       hibernate:
         format_sql: true
   # DB Info
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-      path: /h2-console
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/board
+    username:
+    password:
+  # Redis
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      repositories:
+        enabled: false
+
+expire:
+  defaultTime: 3600
 
 # JPA Log
 logging:
