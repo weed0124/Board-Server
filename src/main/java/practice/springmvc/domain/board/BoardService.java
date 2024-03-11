@@ -11,13 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.PageCustom;
-import practice.springmvc.domain.board.dto.BoardDTO;
+import practice.springmvc.dto.BoardDTO;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.RecommendService;
 import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
-import practice.springmvc.domain.member.Member;
 import practice.springmvc.domain.member.MemberService;
 
 import java.time.LocalDate;
@@ -106,9 +105,7 @@ public class BoardService {
                     .filter(rec -> Period.between(rec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
             if (oneDayRecommend.isEmpty()) {
-                Member member = new Member(getRemoteIp(request));
-                memberService.save(member);
-                Recommend recommend = new Recommend(board, member);
+                Recommend recommend = new Recommend(board, getRemoteIp(request));
                 recommendService.save(recommend);
                 board.addRecommend(recommend);
             }
@@ -126,9 +123,7 @@ public class BoardService {
                     .filter(notRec -> Period.between(notRec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0)
                     .toList();
             if (oneDayNotRecommend.isEmpty()) {
-                Member member = new Member(getRemoteIp(request));
-                memberService.save(member);
-                NotRecommend notRecommend = new NotRecommend(board, member);
+                NotRecommend notRecommend = new NotRecommend(board, getRemoteIp(request));
                 notRecommendService.save(notRecommend);
                 board.addNotRecommend(notRecommend);
             }

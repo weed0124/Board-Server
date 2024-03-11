@@ -20,16 +20,18 @@ public class Recommend extends BaseTimeEntity {
     @Column(name = "RECOMMEND_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
-    public Recommend(Board board, Member member) {
+    private String ip;
+
+    public Recommend(Board board, String ip) {
         this.board = board;
-        this.member = member;
+        this.ip = ip;
     }
 }

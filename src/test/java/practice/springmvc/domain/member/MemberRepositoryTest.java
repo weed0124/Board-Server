@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.member.repository.MemberRepository;
+import practice.springmvc.domain.member.repository.jpa.SpringDataJpaMemberRepository;
 import practice.springmvc.domain.member.repository.memory.MemoryMemberRepository;
 
 import static org.assertj.core.api.Assertions.*;
@@ -15,14 +16,14 @@ import static org.assertj.core.api.Assertions.*;
 class MemberRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    SpringDataJpaMemberRepository memberRepository;
 
-    @AfterEach
-    void afterEach() {
-        if (memberRepository instanceof MemoryMemberRepository) {
-            ((MemoryMemberRepository) memberRepository).clearStore();
-        }
-    }
+//    @AfterEach
+//    void afterEach() {
+//        if (memberRepository instanceof MemoryMemberRepository) {
+//            ((MemoryMemberRepository) memberRepository).clearStore();
+//        }
+//    }
 
     @Test
     public void save() throws Exception {

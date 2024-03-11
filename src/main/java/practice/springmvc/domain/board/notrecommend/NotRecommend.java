@@ -20,16 +20,18 @@ public class NotRecommend extends BaseTimeEntity {
     @Column(name = "NOT_RECOMMEND_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
-    public NotRecommend(Board board, Member member) {
+    private String ip;
+
+    public NotRecommend(Board board, String ip) {
         this.board = board;
-        this.member = member;
+        this.ip = ip;
     }
 }

@@ -24,7 +24,7 @@ public class JpaMemberRepositoryV2 implements MemberRepository {
 
     @Trace
     @Override
-    public Optional<Member> findById(String id) {
+    public Optional<Member> findById(Long id) {
         return repository.findById(id);
     }
 }

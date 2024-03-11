@@ -1,4 +1,4 @@
-package practice.springmvc.domain.board.dto;
+package practice.springmvc.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;

@@ -12,34 +12,34 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 //@Repository
-public class MemoryNotRecommendRepository implements NotRecommendRepository {
-    private static final Map<Long, NotRecommend> store = new ConcurrentHashMap<>();
-    private static long sequence = 0L;
-
-    @Override
-    public NotRecommend save(NotRecommend rec) {
-        rec.setId(++sequence);
-        store.put(rec.getId(), rec);
-        return rec;
-    }
-
-    @Override
-    public Optional<NotRecommend> findById(Long id) {
-        return Optional.ofNullable(store.get(id));
-    }
-
+public class MemoryNotRecommendRepository {
+//    private static final Map<Long, NotRecommend> store = new ConcurrentHashMap<>();
+//    private static long sequence = 0L;
+//
 //    @Override
-//    public List<NotRecommend> findByBoardId(Long boardId) {
-//        Period p = Period.between(LocalDate.now(), LocalDate.now());
+//    public NotRecommend save(NotRecommend rec) {
+//        rec.setId(++sequence);
+//        store.put(rec.getId(), rec);
+//        return rec;
+//    }
+//
+//    @Override
+//    public Optional<NotRecommend> findById(Long id) {
+//        return Optional.ofNullable(store.get(id));
+//    }
+//
+////    @Override
+////    public List<NotRecommend> findByBoardId(Long boardId) {
+////        Period p = Period.between(LocalDate.now(), LocalDate.now());
+////        return new ArrayList<>(store.values()).stream()
+////                .filter(nrec -> nrec.getBoardId() == boardId
+////                        && Period.between(nrec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
+////    }
+//
+//    @Override
+//    public List<NotRecommend> findByNickname(String nickname) {
 //        return new ArrayList<>(store.values()).stream()
-//                .filter(nrec -> nrec.getBoardId() == boardId
+//                .filter(nrec -> nrec.getMember().getNickname().equals(nickname)
 //                        && Period.between(nrec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
 //    }
-
-    @Override
-    public List<NotRecommend> findByNickname(String nickname) {
-        return new ArrayList<>(store.values()).stream()
-                .filter(nrec -> nrec.getMember().getNickname().equals(nickname)
-                        && Period.between(nrec.getCreatedDate().toLocalDate(), LocalDate.now()).getDays() == 0).toList();
-    }
 }

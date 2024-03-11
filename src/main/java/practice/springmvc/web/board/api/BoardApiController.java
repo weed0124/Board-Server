@@ -18,11 +18,13 @@ import practice.springmvc.domain.PagedModelUtil;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
-import practice.springmvc.domain.board.dto.BoardDTO;
-import practice.springmvc.domain.member.Member;
+import practice.springmvc.dto.BoardDTO;
+import practice.springmvc.dto.response.Result;
 import practice.springmvc.exception.PasswordInvalidException;
 import practice.springmvc.web.HomeController;
 import practice.springmvc.web.board.form.BoardUpdateForm;
+import practice.springmvc.dto.BoardWriteApiDTO;
+import practice.springmvc.dto.BoardApiDTO;
 
 import java.net.URI;
 import java.util.List;
@@ -136,57 +138,5 @@ public class BoardApiController {
     @GetMapping("{id}/notrecommend")
     public ResponseEntity<Result> notRecommend(@PathVariable Long id, HttpServletRequest request) {
         return ResponseEntity.ok(new Result(new BoardApiDTO(boardService.notRecommend(boardService.findById(id).orElseThrow(), request))));
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
-    }
-
-    @Getter @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    static class BoardApiDTO {
-        Long id;
-        String title;
-        String content;
-        String nickname;
-        String ip;
-        int recommendCount;
-        int notRecommendCount;
-
-        public BoardApiDTO(Board board) {
-            this.id = board.getId();
-            this.title = board.getTitle();
-            this.content = board.getContent();
-            this.nickname = board.getNickname();
-            this.ip = board.getIp();
-            this.recommendCount = board.getRecommends().size();
-            this.notRecommendCount = board.getNotRecommends().size();
-        }
-
-        public BoardApiDTO(BoardDTO boardDTO) {
-            this.id = boardDTO.getId();
-            this.title = boardDTO.getTitle();
-            this.content = boardDTO.getContent();
-            this.nickname = boardDTO.getNickname();
-            this.ip = boardDTO.getIp();
-            this.recommendCount = boardDTO.getRecommendCount();
-            this.notRecommendCount = boardDTO.getNotRecommendCount();
-        }
-    }
-
-    @Getter @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    static class BoardWriteApiDTO {
-        Long id;
-        String title;
-        String content;
-        String nickname;
-        String password;
-        String ip;
     }
 }

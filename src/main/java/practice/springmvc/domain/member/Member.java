@@ -3,17 +3,31 @@ package practice.springmvc.domain.member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import practice.springmvc.domain.entity.BaseTimeEntity;
 
 @Entity
 @Getter @Setter
-public class Member {
+@DynamicInsert
+public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    public enum Status {
+        WORKING, EXPIRED
+    }
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
-    private String id;
-    private String nickname;
+    private Long id;
+    private String loginId;
     private String password;
+    private String nickname;
     private String address;
+
+    @Column(nullable = false)
+    @ColumnDefault("'WORKING'")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public Member() {
     }
@@ -25,5 +39,13 @@ public class Member {
     public Member(String nickname, String password) {
         this.nickname = nickname;
         this.password = password;
+    }
+
+    public Member(String loginId, String password, String nickname, String address, Status status) {
+        this.loginId = loginId;
+        this.password = password;
+        this.nickname = nickname;
+        this.address = address;
+        this.status = status;
     }
 }

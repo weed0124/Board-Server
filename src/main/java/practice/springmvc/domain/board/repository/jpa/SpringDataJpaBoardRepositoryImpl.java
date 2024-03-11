@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
-import practice.springmvc.domain.board.dto.BoardDTO;
-import practice.springmvc.domain.board.dto.QBoardDTO;
+import practice.springmvc.dto.BoardDTO;
+import practice.springmvc.dto.QBoardDTO;
 
 import java.util.List;
 
