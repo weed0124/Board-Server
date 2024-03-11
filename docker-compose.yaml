@@ -16,8 +16,14 @@ services:
       - 'redis'
   mysql:
     image: 'mysql:8.0'
+    container_name: mysql
+    restart: always
+    command: ["--character-set-server=utf8mb4","--collation-server=utf8mb4_unicode_ci"]
     env_file:
       - ./env/mysql.env
+    volumes:
+      - './data/db/initdb.d:/docker-entrypoint-initdb.d'
+      - './data/db/mysql:/var/lib/mysql'
   redis:
     image: redis:7.2.4
     container_name: redis

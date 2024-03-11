@@ -29,7 +29,7 @@ spring:
     allow-bean-definition-overriding: true # SpringBoot 2.1 부터 Bean Overriding Default값이 비활성화 되어 있어 활성화 처리 필요
   jpa:
     hibernate:
-      ddl-auto: create # JPA Auto DDL 설정 -> 개발 초기 참고용으로 사용
+      ddl-auto: validate # JPA Auto DDL 설정 -> 개발 초기 참고용으로 사용
     properties:
       hibernate:
         format_sql: true
@@ -44,7 +44,7 @@ spring:
     type: redis
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
       password:
       repositories:
