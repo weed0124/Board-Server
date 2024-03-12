@@ -14,6 +14,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import practice.springmvc.annotation.LoginCheck;
 import practice.springmvc.domain.PagedModelUtil;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
@@ -42,6 +43,7 @@ public class BoardApiController {
     private final BoardService boardService;
     private final PagedResourcesAssembler assembler;
 
+    @LoginCheck
     @GetMapping("/best")
     public ResponseEntity<EntityModel<ResultResponse>> bestBoards() {
         List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
@@ -57,6 +59,7 @@ public class BoardApiController {
         return ResponseEntity.ok().body(entityModel);
     }
 
+    @LoginCheck
     @GetMapping("/worst")
     public ResponseEntity<EntityModel<ResultResponse>> worstBoards() {
         List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
@@ -72,6 +75,7 @@ public class BoardApiController {
         return ResponseEntity.ok().body(entityModel);
     }
 
+    @LoginCheck
     @PostMapping("/add")
     public ResponseEntity<ResultResponse> saveBoard(@RequestBody BoardWriteApiDTO boardWriteApiDTO, HttpServletRequest request) {
         Board board = boardService.save(new Board(boardWriteApiDTO.getTitle(),
@@ -86,6 +90,7 @@ public class BoardApiController {
         return ResponseEntity.created(location).build();
     }
 
+    @LoginCheck
     @GetMapping
     public ResponseEntity<PagedModel<EntityModel<BoardDTO>>> listBoard(@RequestBody BoardSearchCond cond, @PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
         Page<BoardDTO> boardList = boardService.findPagingAllV2(cond, pageable);
@@ -97,6 +102,7 @@ public class BoardApiController {
         return ResponseEntity.ok().body(entityModels);
     }
 
+    @LoginCheck
     @GetMapping("{id}")
     public ResponseEntity<EntityModel<ResultResponse>> readBoard(@PathVariable Long id, HttpServletRequest request) {
         EntityModel<ResultResponse> entityModel = EntityModel.of(new ResultResponse<>(new BoardApiDTO(boardService.findById(id).orElseThrow())));
@@ -109,6 +115,7 @@ public class BoardApiController {
         return ResponseEntity.ok().body(entityModel);
     }
 
+    @LoginCheck
     @PutMapping("{id}")
     public ResponseEntity<ResultResponse> editBoard(@PathVariable Long id, @RequestBody BoardUpdateForm form) {
         Board board = boardService.findById(id).orElseThrow();
@@ -125,16 +132,19 @@ public class BoardApiController {
         return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(board)));
     }
 
+    @LoginCheck
     @DeleteMapping("{id}")
     public void deleteBoard(@PathVariable Long id) {
         boardService.delete(id);
     }
 
+    @LoginCheck
     @GetMapping("{id}/recommend")
     public ResponseEntity<ResultResponse> recommend(@PathVariable Long id, HttpServletRequest request) {
         return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(boardService.recommend(boardService.findById(id).orElseThrow(), request))));
     }
 
+    @LoginCheck
     @GetMapping("{id}/notrecommend")
     public ResponseEntity<ResultResponse> notRecommend(@PathVariable Long id, HttpServletRequest request) {
         return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(boardService.notRecommend(boardService.findById(id).orElseThrow(), request))));
