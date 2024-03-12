@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import practice.springmvc.dto.request.MemberLoginRequest;
 import practice.springmvc.dto.response.LoginResponse;
@@ -72,5 +69,12 @@ public class MemberApiController {
     @PostMapping("/logout")
     public void logout(HttpSession session) {
         SessionUtil.clear(session);
+    }
+
+    @GetMapping("/my-info")
+    public MemberDTO memberInfo(HttpSession session) {
+        String loginMemberId = SessionUtil.getLoginMemberId(session);
+        Member memberInfo = memberService.getMemberInfo(loginMemberId);
+        return new MemberDTO(memberInfo);
     }
 }
