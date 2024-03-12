@@ -2,6 +2,8 @@ package practice.springmvc.utils;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Optional;
+
 public class SessionUtil {
     private static final String LOGIN_MEMBER_ID = "LOGIN_MEMBER_ID";
 
@@ -9,7 +11,7 @@ public class SessionUtil {
     }
 
     public static String getLoginMemberId(HttpSession session) {
-        return String.valueOf(session.getAttribute(LOGIN_MEMBER_ID));
+        return (String) session.getAttribute(LOGIN_MEMBER_ID);
     }
 
     public static void setLoginMemberId(HttpSession session, String id) {
