@@ -23,4 +23,12 @@ public class MemberDTO {
     @NotBlank
     String address;
     Member.Status status;
+
+    public MemberDTO(Member member) {
+        this.loginId = member.getLoginId();
+        this.password = member.getPassword();
+        this.nickname = member.getNickname();
+        this.address = member.getAddress();
+        this.status = member.getStatus();
+    }
 }

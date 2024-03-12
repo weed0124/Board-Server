@@ -10,11 +10,13 @@
 > 대용량 트래픽을 고려한 어플리케이션 개발 (초당 1000 tps 이상의 게시글 검색 API)
 
 ### 개발환경
-> Java 17, SpringBoot v3.1.5, JPA, QueryDSL, MySQL, Redis, Docker, AWS EC2, Locust
+> Java 17, SpringBoot v3.1.5, JPA, QueryDSL, JUnit5, MySQL, Redis, Docker, AWS EC2, Locust
 
 ### 프로그램 주요 기능
 - 회원
   - 가입
+  - 비밀번호 암호화
+  - 로그인, 로그아웃
 - 게시판
     - 게시글 관리
         - 게시글 추가, 삭제, 수정, 조회

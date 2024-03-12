@@ -25,7 +25,7 @@ public class MemberService {
     public Member register(Member member) {
         boolean isDuplicate = isDuplicatedId(member.getLoginId());
         if (isDuplicate) {
-            throw new RuntimeException("중복된 ID");
+            throw new RuntimeException("중복된 ID입니다.");
         }
 
         member.setPassword(encryptSHA256(member.getPassword()));
