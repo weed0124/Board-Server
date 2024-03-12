@@ -19,7 +19,7 @@ import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.dto.BoardDTO;
-import practice.springmvc.dto.response.Result;
+import practice.springmvc.dto.response.ResultResponse;
 import practice.springmvc.exception.PasswordInvalidException;
 import practice.springmvc.web.HomeController;
 import practice.springmvc.web.board.form.BoardUpdateForm;
@@ -43,13 +43,13 @@ public class BoardApiController {
     private final PagedResourcesAssembler assembler;
 
     @GetMapping("/best")
-    public ResponseEntity<EntityModel<Result>> bestBoards() {
+    public ResponseEntity<EntityModel<ResultResponse>> bestBoards() {
         List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
                 .filter(board -> board.getRecommends().size() >= 3)
                 .map(BoardApiDTO::new)
                 .collect(Collectors.toList());
 
-        EntityModel entityModel = EntityModel.of(new Result(list));
+        EntityModel entityModel = EntityModel.of(new ResultResponse(list));
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).bestBoards());
         entityModel.add(linkTo.withSelfRel())
                 .add(linkTo(HomeController.class).withRel("home"));
@@ -58,13 +58,13 @@ public class BoardApiController {
     }
 
     @GetMapping("/worst")
-    public ResponseEntity<EntityModel<Result>> worstBoards() {
+    public ResponseEntity<EntityModel<ResultResponse>> worstBoards() {
         List<BoardApiDTO> list = boardService.findAll(new BoardSearchCond()).stream()
                 .filter(board -> board.getNotRecommends().size() >= 3)
                 .map(BoardApiDTO::new)
                 .collect(Collectors.toList());
 
-        EntityModel entityModel = EntityModel.of(new Result(list));
+        EntityModel entityModel = EntityModel.of(new ResultResponse(list));
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).worstBoards());
         entityModel.add(linkTo.withSelfRel())
                 .add(linkTo(HomeController.class).withRel("home"));
@@ -73,7 +73,7 @@ public class BoardApiController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Result> saveBoard(@RequestBody BoardWriteApiDTO boardWriteApiDTO, HttpServletRequest request) {
+    public ResponseEntity<ResultResponse> saveBoard(@RequestBody BoardWriteApiDTO boardWriteApiDTO, HttpServletRequest request) {
         Board board = boardService.save(new Board(boardWriteApiDTO.getTitle(),
                 boardWriteApiDTO.getContent(),
                 boardWriteApiDTO.getNickname(), boardWriteApiDTO.getPassword(), boardWriteApiDTO.getIp()));
@@ -98,8 +98,8 @@ public class BoardApiController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<EntityModel<Result>> readBoard(@PathVariable Long id, HttpServletRequest request) {
-        EntityModel<Result> entityModel = EntityModel.of(new Result<>(new BoardApiDTO(boardService.findById(id).orElseThrow())));
+    public ResponseEntity<EntityModel<ResultResponse>> readBoard(@PathVariable Long id, HttpServletRequest request) {
+        EntityModel<ResultResponse> entityModel = EntityModel.of(new ResultResponse<>(new BoardApiDTO(boardService.findById(id).orElseThrow())));
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).readBoard(id, request));
         entityModel.add(linkTo.withSelfRel())
                 .add(linkTo(methodOn(this.getClass()).recommend(id, request)).withRel("recommend"))
@@ -110,7 +110,7 @@ public class BoardApiController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Result> editBoard(@PathVariable Long id, @RequestBody BoardUpdateForm form) {
+    public ResponseEntity<ResultResponse> editBoard(@PathVariable Long id, @RequestBody BoardUpdateForm form) {
         Board board = boardService.findById(id).orElseThrow();
 
         String password = form.getPassword();
@@ -122,7 +122,7 @@ public class BoardApiController {
         board.setContent(form.getContent());
 
         boardService.update(board.getId(), board);
-        return ResponseEntity.ok(new Result(new BoardApiDTO(board)));
+        return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(board)));
     }
 
     @DeleteMapping("{id}")
@@ -131,12 +131,12 @@ public class BoardApiController {
     }
 
     @GetMapping("{id}/recommend")
-    public ResponseEntity<Result> recommend(@PathVariable Long id, HttpServletRequest request) {
-        return ResponseEntity.ok(new Result(new BoardApiDTO(boardService.recommend(boardService.findById(id).orElseThrow(), request))));
+    public ResponseEntity<ResultResponse> recommend(@PathVariable Long id, HttpServletRequest request) {
+        return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(boardService.recommend(boardService.findById(id).orElseThrow(), request))));
     }
 
     @GetMapping("{id}/notrecommend")
-    public ResponseEntity<Result> notRecommend(@PathVariable Long id, HttpServletRequest request) {
-        return ResponseEntity.ok(new Result(new BoardApiDTO(boardService.notRecommend(boardService.findById(id).orElseThrow(), request))));
+    public ResponseEntity<ResultResponse> notRecommend(@PathVariable Long id, HttpServletRequest request) {
+        return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(boardService.notRecommend(boardService.findById(id).orElseThrow(), request))));
     }
 }
