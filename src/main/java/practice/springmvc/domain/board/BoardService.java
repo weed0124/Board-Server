@@ -19,15 +19,14 @@ import practice.springmvc.domain.board.notrecommend.NotRecommendService;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.RecommendService;
 import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
-import practice.springmvc.domain.member.MemberService;
 import practice.springmvc.dto.request.CommentRequest;
-import practice.springmvc.utils.SHA256Util;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Slf4j
 @Service
@@ -164,6 +163,16 @@ public class BoardService {
             throw new RuntimeException("존재하지 않는 게시글 ID입니다.");
         }
         return commentService.getAllCommentsByBoard(boardId);
+    }
+
+    public Comment editComment(Comment comment, CommentRequest update, HttpServletRequest request) {
+        String remoteIp = getRemoteIp(request);
+        comment.setIp(remoteIp);
+        return commentService.update(comment, update);
+    }
+
+    public void deleteComment(Long commentId, String password) {
+        commentService.delete(commentId, password);
     }
 
     @Trace

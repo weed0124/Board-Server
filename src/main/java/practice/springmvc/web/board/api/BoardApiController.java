@@ -11,6 +11,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,6 +27,7 @@ import practice.springmvc.dto.request.CommentRequest;
 import practice.springmvc.dto.response.CommentResponse;
 import practice.springmvc.dto.response.ResultResponse;
 import practice.springmvc.exception.PasswordInvalidException;
+import practice.springmvc.utils.SHA256Util;
 import practice.springmvc.web.HomeController;
 import practice.springmvc.web.board.form.BoardUpdateForm;
 import practice.springmvc.dto.BoardWriteApiDTO;
@@ -40,6 +42,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static practice.springmvc.utils.SHA256Util.*;
 
 @Slf4j
 @RestController
@@ -47,6 +50,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 public class BoardApiController {
 
+    private final ResponseEntity<ResultResponse> FAIL_RESPONSE = new ResponseEntity<ResultResponse>(HttpStatus.BAD_REQUEST);
     private final BoardService boardService;
     private final PagedResourcesAssembler assembler;
 
@@ -157,7 +161,7 @@ public class BoardApiController {
         return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(boardService.notRecommend(boardService.findById(id).orElseThrow(), request))));
     }
 
-    @PostMapping("/comment")
+    @PostMapping("/comments")
     public ResponseEntity<ResultResponse> saveComment(@RequestBody CommentRequest commentRequest, HttpServletRequest request) {
         Comment savedComment = null;
 
@@ -189,24 +193,46 @@ public class BoardApiController {
     }
 
     @Trace
-    @GetMapping("{id}/comment")
+    @GetMapping("{id}/comments")
     public ResponseEntity<ResultResponse> commentsByBoard(@PathVariable Long id) {
         List<CommentResponse> result = new ArrayList<>();
         Map<Long, CommentResponse> map = new HashMap<>();
 
         boardService.listComment(id).stream().forEach(c -> {
+            c.setPassword(encryptSHA256(c.getPassword()));
             CommentResponse dto = new CommentResponse(c);
             map.put(dto.getId(), dto);
-            log.info("id : {}", dto.getId());
             if (c.getParent() != null) {
-                log.info("parent : {}", c.getParent().getId());
                 map.get(c.getParent().getId()).getChildren().add(c);
             } else {
                 result.add(dto);
             }
         });
 
-        log.info("result : {}", result);
         return ResponseEntity.ok(new ResultResponse(result));
+    }
+
+    @PutMapping("/comments/{id}")
+    public ResponseEntity<ResultResponse> editComment(@PathVariable Long id, @RequestBody CommentRequest commentRequest, HttpServletRequest request) {
+        Comment comment = boardService.findByCommentId(id);
+        if (!comment.getPassword().equals(encryptSHA256(commentRequest.getPassword()))) {
+            throw new RuntimeException("패스워드가 일치하지 않습니다.");
+        }
+        Comment updatedComment = boardService.editComment(comment, commentRequest, request);
+        return ResponseEntity.ok(new ResultResponse(new CommentResponse(updatedComment)));
+    }
+
+    @DeleteMapping("/comments/{id}")
+    public ResponseEntity<ResultResponse> deleteComment(@PathVariable Long id, @RequestBody CommentRequest commentRequest) {
+        ResponseEntity<ResultResponse> result = null;
+
+        try {
+            boardService.deleteComment(id, commentRequest.getPassword());
+            result = ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            log.info("delete Comment FAIL");
+            result = FAIL_RESPONSE;
+        }
+        return result;
     }
 }

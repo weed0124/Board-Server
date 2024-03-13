@@ -27,7 +27,7 @@ import static practice.springmvc.utils.SessionUtil.*;
 @RequestMapping("/api/member")
 public class MemberApiController {
 
-    private static final ResponseEntity<ResultResponse> FAIL_RESPONSE = new ResponseEntity<ResultResponse>(HttpStatus.BAD_REQUEST);
+    private final ResponseEntity<ResultResponse> FAIL_RESPONSE = new ResponseEntity<ResultResponse>(HttpStatus.BAD_REQUEST);
     private final MemberService memberService;
     private static LoginResponse loginResponse;
 
