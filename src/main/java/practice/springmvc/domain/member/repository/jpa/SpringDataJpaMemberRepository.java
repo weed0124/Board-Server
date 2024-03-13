@@ -14,4 +14,6 @@ public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Lon
 
 //    @Query("select m from Member m where m.loginId = :loginId")
     Optional<Member> findByLoginId(String loginId);
+    Optional<Member> findByAddress(String address);
+    Optional<Member> findByNickname(String nickname);
 }
