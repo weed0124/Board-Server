@@ -21,6 +21,16 @@ public class BoardDTO implements Serializable {
     private int recommendCount;
     private int notRecommendCount;
 
+    @QueryProjection
+    public BoardDTO(Long id, String title, String nickname, String ip, LocalDateTime createdDate, int readCount) {
+        this.id = id;
+        this.title = title;
+        this.nickname = nickname;
+        this.ip = ip;
+        this.createdDate = createdDate;
+        this.readCount = readCount;
+    }
+
     public BoardDTO(Long id, String title, String content, String nickname, String ip, LocalDateTime createdDate, int readCount, int recommendCount, int notRecommendCount) {
         this.id = id;
         this.title = title;

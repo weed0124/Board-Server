@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import practice.springmvc.annotation.Trace;
-import practice.springmvc.domain.board.notrecommend.repository.NotRecommendRepository;
+import practice.springmvc.domain.board.Board;
+import practice.springmvc.domain.board.notrecommend.repository.jpa.SpringDataJpaNotRecommendRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class NotRecommendService {
-    private final NotRecommendRepository notRecommendRepository;
+    private final SpringDataJpaNotRecommendRepository notRecommendRepository;
 
     @Trace
     public NotRecommend save(NotRecommend notRecommend) {
@@ -25,12 +26,7 @@ public class NotRecommendService {
         return notRecommendRepository.findById(id);
     }
 
-//    public List<NotRecommend> findByBoardId(Long boardId) {
-//        return notRecommendRepository.findByBoardId(boardId);
-//    }
-
-    @Trace
-    public List<NotRecommend> findByNickname(String nickname) {
-        return notRecommendRepository.findByNickname(nickname);
+    public List<NotRecommend> findByBoard(Board board) {
+        return notRecommendRepository.findNotRecommendsByBoard(board);
     }
 }

@@ -15,11 +15,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import practice.springmvc.annotation.LoginCheck;
+import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.PagedModelUtil;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
+import practice.springmvc.domain.board.comment.Comment;
 import practice.springmvc.dto.BoardDTO;
+import practice.springmvc.dto.request.CommentRequest;
+import practice.springmvc.dto.response.CommentResponse;
 import practice.springmvc.dto.response.ResultResponse;
 import practice.springmvc.exception.PasswordInvalidException;
 import practice.springmvc.web.HomeController;
@@ -28,7 +32,10 @@ import practice.springmvc.dto.BoardWriteApiDTO;
 import practice.springmvc.dto.BoardApiDTO;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -148,5 +155,58 @@ public class BoardApiController {
     @GetMapping("{id}/notrecommend")
     public ResponseEntity<ResultResponse> notRecommend(@PathVariable Long id, HttpServletRequest request) {
         return ResponseEntity.ok(new ResultResponse(new BoardApiDTO(boardService.notRecommend(boardService.findById(id).orElseThrow(), request))));
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<ResultResponse> saveComment(@RequestBody CommentRequest commentRequest, HttpServletRequest request) {
+        Comment savedComment = null;
+
+        if (commentRequest.getParentId() != null) {
+            savedComment = boardService.saveComment(new Comment(commentRequest.getId(),
+                    commentRequest.getNickname(),
+                    commentRequest.getPassword(),
+                    boardService.getRemoteIp(request),
+                    boardService.findById(commentRequest.getBoardId()).orElseThrow(),
+                    commentRequest.getContent(),
+                    boardService.findByCommentId(commentRequest.getParentId())
+            ));
+        } else {
+            savedComment = boardService.saveComment(new Comment(commentRequest.getId(),
+                    commentRequest.getNickname(),
+                    commentRequest.getPassword(),
+                    boardService.getRemoteIp(request),
+                    boardService.findById(commentRequest.getBoardId()).orElseThrow(),
+                    commentRequest.getContent()
+            ));
+        }
+
+        URI location = ServletUriComponentsBuilder.fromContextPath(request)
+                .path("/api/board/{id}")
+                .buildAndExpand(savedComment.getBoard().getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @Trace
+    @GetMapping("{id}/comment")
+    public ResponseEntity<ResultResponse> commentsByBoard(@PathVariable Long id) {
+        List<CommentResponse> result = new ArrayList<>();
+        Map<Long, CommentResponse> map = new HashMap<>();
+
+        boardService.listComment(id).stream().forEach(c -> {
+            CommentResponse dto = new CommentResponse(c);
+            map.put(dto.getId(), dto);
+            log.info("id : {}", dto.getId());
+            if (c.getParent() != null) {
+                log.info("parent : {}", c.getParent().getId());
+                map.get(c.getParent().getId()).getChildren().add(c);
+            } else {
+                result.add(dto);
+            }
+        });
+
+        log.info("result : {}", result);
+        return ResponseEntity.ok(new ResultResponse(result));
     }
 }

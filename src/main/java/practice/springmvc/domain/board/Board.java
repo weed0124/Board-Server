@@ -3,7 +3,6 @@ package practice.springmvc.domain.board;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import practice.springmvc.domain.board.comment.Comment;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.entity.BaseTimeEntity;
@@ -44,14 +43,6 @@ public class Board extends BaseTimeEntity {
         notRec.setBoard(this);
     }
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setBoard(this);
-    }
-
     public Board() {
     }
 
@@ -69,9 +60,5 @@ public class Board extends BaseTimeEntity {
 
     public int notRecommendsSize() {
         return notRecommends.size();
-    }
-
-    public int commentsSize() {
-        return comments.size();
     }
 }

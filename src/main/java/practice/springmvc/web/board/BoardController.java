@@ -16,12 +16,16 @@ import practice.springmvc.domain.PageableCustom;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
+import practice.springmvc.domain.board.comment.Comment;
 import practice.springmvc.dto.BoardDTO;
 import practice.springmvc.utils.SHA256Util;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static practice.springmvc.utils.SHA256Util.*;
 
 @Slf4j
 @Controller
@@ -70,7 +74,7 @@ public class BoardController {
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
         board.setNickname(form.getNickname());
-        board.setPassword(SHA256Util.encryptSHA256(form.getPassword()));
+        board.setPassword(encryptSHA256(form.getPassword()));
         board.setIp(boardService.getRemoteIp(request));
 
         boardService.save(board);
@@ -80,7 +84,10 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public String read(@PathVariable Long boardId, Model model, HttpServletRequest request) {
         Board findBoard = boardService.findById(boardId).orElseThrow();
+        List<Comment> comments = boardService.listComment(findBoard.getId());
         model.addAttribute("board", boardService.addReadCount(findBoard, request));
+        model.addAttribute("comments", comments);
+        model.addAttribute("commentsSize", comments.size());
 
         return "boards/board";
     }
@@ -108,7 +115,7 @@ public class BoardController {
 
     @PostMapping("/{boardId}/edit")
     public String edit(@PathVariable Long boardId, @ModelAttribute("board") BoardUpdateForm form, BindingResult bindingResult, HttpServletRequest request) {
-        String passParam = SHA256Util.encryptSHA256(form.getPassword());
+        String passParam = encryptSHA256(form.getPassword());
         String findPassword = boardService.findById(boardId).orElseThrow().getPassword();
         if (!findPassword.equals(passParam)) {
             bindingResult.reject("loginFail", "비밀번호가 맞지 않습니다.");
@@ -123,7 +130,7 @@ public class BoardController {
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
         board.setNickname(form.getNickname());
-        board.setPassword(SHA256Util.encryptSHA256(form.getPassword()));
+        board.setPassword(encryptSHA256(form.getPassword()));
         board.setIp(boardService.getRemoteIp(request));
 
         boardService.update(boardId, board);

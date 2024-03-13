@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.PageCustom;
+import practice.springmvc.domain.board.comment.Comment;
+import practice.springmvc.domain.board.comment.CommentService;
 import practice.springmvc.dto.BoardDTO;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
@@ -18,6 +20,8 @@ import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.RecommendService;
 import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
 import practice.springmvc.domain.member.MemberService;
+import practice.springmvc.dto.request.CommentRequest;
+import practice.springmvc.utils.SHA256Util;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -34,7 +38,7 @@ public class BoardService {
     private final SpringDataJpaBoardRepository boardRepository;
     private final RecommendService recommendService;
     private final NotRecommendService notRecommendService;
-    private final MemberService memberService;
+    private final CommentService commentService;
 
     @Trace
     public Board save(Board board) {
@@ -130,6 +134,41 @@ public class BoardService {
         }
 
         return board;
+    }
+
+    @Trace
+    public Comment saveComment(Comment comment) {
+        Optional<Board> board = boardRepository.findById(comment.getBoard().getId());
+        if (board.isEmpty()) {
+            throw new RuntimeException("존재하지 않는 게시글입니다.");
+        }
+
+        Comment parent = comment.getParent();
+        // 대댓글
+        if (parent != null) {
+            if (parent.getBoard().getId() != comment.getBoard().getId()) {
+                throw new RuntimeException("댓글과 대댓글의 게시글 번호가 일치하지 않습니다.");
+            }
+            comment.updateParent(parent);
+        }
+
+        Comment savedComment = commentService.save(comment);
+
+        return savedComment;
+    }
+
+    @Trace
+    public List<Comment> listComment(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow();
+        if (board == null) {
+            throw new RuntimeException("존재하지 않는 게시글 ID입니다.");
+        }
+        return commentService.getAllCommentsByBoard(boardId);
+    }
+
+    @Trace
+    public Comment findByCommentId(Long commentId) {
+        return commentService.findById(commentId);
     }
 
     private boolean isOwnIp(Board board, HttpServletRequest request) {
