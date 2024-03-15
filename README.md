@@ -1,17 +1,17 @@
 # Board-Server
 
 ### 기획
-> 커뮤니티 사이트의 익명 게시판을 구현함으로서 자유롭게 소통 및 정보 공유 사이트를 목표로 구현
-> 
+- 커뮤니티 사이트의 익명 게시판을 구현함으로서 자유롭게 소통 및 정보 공유 사이트를 목표로 구현
+ 
 ---
 ### 목적
-> Spring-MVC 패턴 및 SpringBoot, JPA 기능 습득 및 활용이 목적이므로 디자인은 최대한 단순하게 사용 또는 Rest API로 사용 예정
-> 
-> 대용량 트래픽을 고려한 어플리케이션 개발 (초당 1000 tps 이상의 게시글 검색 API)
+- Spring-MVC 패턴 및 SpringBoot, JPA 기능 습득 및 활용이 목적이므로 디자인은 최대한 단순하게 사용 또는 Rest API로 사용 예정
+ 
+- 대용량 트래픽을 고려한 어플리케이션 개발 (초당 1000 tps 이상의 게시글 검색 API)
 
 ---
 ### 개발환경
-> Java 17, SpringBoot v3.1.5, JPA, QueryDSL, JUnit5, MySQL, Redis, Docker, AWS EC2, Locust
+- Java 17, SpringBoot v3.1.5, JPA, QueryDSL, JUnit5, MySQL, Redis, Docker, AWS EC2, Locust
 
 ---
 ### 프로그램 주요 기능
