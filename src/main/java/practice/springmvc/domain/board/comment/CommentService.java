@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
 import practice.springmvc.dto.request.CommentRequest;
+import practice.springmvc.exception.BoardNotFoundException;
 import practice.springmvc.utils.SHA256Util;
 
 import java.util.List;
+import java.util.Optional;
 
 import static practice.springmvc.utils.SHA256Util.*;
 
@@ -27,11 +29,14 @@ public class CommentService {
     }
 
     public Comment update(Comment comment, CommentRequest update) {
-        Board board = boardRepository.findById(comment.getBoard().getId()).orElseThrow();
+        Optional<Board> board = boardRepository.findById(comment.getBoard().getId());
+        if (board.isEmpty()) {
+            throw new BoardNotFoundException();
+        }
         comment.setNickname(update.getNickname());
         comment.setPassword(update.getPassword());
         comment.setContent(update.getContent());
-        comment.setBoard(board);
+        comment.setBoard(board.get());
 
         return comment;
     }

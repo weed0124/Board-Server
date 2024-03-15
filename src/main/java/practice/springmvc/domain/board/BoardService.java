@@ -13,6 +13,8 @@ import practice.springmvc.annotation.Trace;
 import practice.springmvc.domain.PageCustom;
 import practice.springmvc.domain.board.comment.Comment;
 import practice.springmvc.domain.board.comment.CommentService;
+import practice.springmvc.domain.board.tag.Tag;
+import practice.springmvc.domain.board.tag.TagService;
 import practice.springmvc.dto.BoardDTO;
 import practice.springmvc.domain.board.notrecommend.NotRecommend;
 import practice.springmvc.domain.board.notrecommend.NotRecommendService;
@@ -20,7 +22,10 @@ import practice.springmvc.domain.board.recommend.Recommend;
 import practice.springmvc.domain.board.recommend.RecommendService;
 import practice.springmvc.domain.board.repository.jpa.SpringDataJpaBoardRepository;
 import practice.springmvc.dto.request.CommentRequest;
+import practice.springmvc.dto.request.TagRequest;
+import practice.springmvc.exception.BoardNotFoundException;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -38,6 +43,7 @@ public class BoardService {
     private final RecommendService recommendService;
     private final NotRecommendService notRecommendService;
     private final CommentService commentService;
+    private final TagService tagService;
 
     @Trace
     public Board save(Board board) {
@@ -139,7 +145,7 @@ public class BoardService {
     public Comment saveComment(Comment comment) {
         Optional<Board> board = boardRepository.findById(comment.getBoard().getId());
         if (board.isEmpty()) {
-            throw new RuntimeException("존재하지 않는 게시글입니다.");
+            throw new BoardNotFoundException();
         }
 
         Comment parent = comment.getParent();
@@ -158,19 +164,21 @@ public class BoardService {
 
     @Trace
     public List<Comment> listComment(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow();
-        if (board == null) {
-            throw new RuntimeException("존재하지 않는 게시글 ID입니다.");
+        Optional<Board> board = boardRepository.findById(boardId);
+        if (board.isEmpty()) {
+            throw new BoardNotFoundException();
         }
         return commentService.getAllCommentsByBoard(boardId);
     }
 
+    @Trace
     public Comment editComment(Comment comment, CommentRequest update, HttpServletRequest request) {
         String remoteIp = getRemoteIp(request);
         comment.setIp(remoteIp);
         return commentService.update(comment, update);
     }
 
+    @Trace
     public void deleteComment(Long commentId, String password) {
         commentService.delete(commentId, password);
     }
@@ -178,6 +186,39 @@ public class BoardService {
     @Trace
     public Comment findByCommentId(Long commentId) {
         return commentService.findById(commentId);
+    }
+
+    @Trace
+    public Tag saveTag(Tag tag) {
+        Optional<Board> board = boardRepository.findById(tag.getBoard().getId());
+        if (board.isEmpty()) {
+            throw new BoardNotFoundException();
+        }
+        return tagService.save(tag);
+    }
+
+    public Optional<Tag> findTagById(Long id) {
+        return tagService.findById(id);
+    }
+
+    @Trace
+    public List<Tag> listTags(Long boardId) {
+        Optional<Board> board = boardRepository.findById(boardId);
+        if (board.isEmpty()) {
+            throw new BoardNotFoundException();
+        }
+
+        return tagService.listTags(boardId);
+    }
+
+    @Trace
+    public Tag editTag(Tag tag, TagRequest update) {
+        return tagService.update(tag, update);
+    }
+
+    @Trace
+    public void deleteTag(Long tagId) {
+        tagService.delete(tagId);
     }
 
     private boolean isOwnIp(Board board, HttpServletRequest request) {

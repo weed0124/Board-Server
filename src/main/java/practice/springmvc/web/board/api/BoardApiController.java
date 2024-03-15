@@ -22,10 +22,13 @@ import practice.springmvc.domain.board.Board;
 import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.comment.Comment;
+import practice.springmvc.domain.board.tag.Tag;
 import practice.springmvc.dto.BoardDTO;
 import practice.springmvc.dto.request.CommentRequest;
+import practice.springmvc.dto.request.TagRequest;
 import practice.springmvc.dto.response.CommentResponse;
 import practice.springmvc.dto.response.ResultResponse;
+import practice.springmvc.dto.response.TagResponse;
 import practice.springmvc.exception.PasswordInvalidException;
 import practice.springmvc.utils.SHA256Util;
 import practice.springmvc.web.HomeController;
@@ -162,7 +165,7 @@ public class BoardApiController {
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<ResultResponse> saveComment(@RequestBody CommentRequest commentRequest, HttpServletRequest request) {
+    public ResponseEntity saveComment(@RequestBody CommentRequest commentRequest, HttpServletRequest request) {
         Comment savedComment = null;
 
         if (commentRequest.getParentId() != null) {
@@ -233,6 +236,47 @@ public class BoardApiController {
             log.info("delete Comment FAIL");
             result = FAIL_RESPONSE;
         }
+        return result;
+    }
+
+    @PostMapping("/tags")
+    public ResponseEntity saveTag(@RequestBody TagRequest tagRequest, HttpServletRequest request) {
+        Tag tag = boardService.saveTag(new Tag(tagRequest.getId(),
+                tagRequest.getName(),
+                tagRequest.getUrl(),
+                boardService.findById(tagRequest.getBoardId()).orElseThrow()
+        ));
+
+        URI location = ServletUriComponentsBuilder.fromContextPath(request)
+                .path("/api/board/{id}")
+                .buildAndExpand(tag.getBoard().getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("{id}/tags")
+    public ResponseEntity<ResultResponse> listTag(@PathVariable Long id) {
+        return ResponseEntity.ok(new ResultResponse(boardService.listTags(id)));
+    }
+
+    @PutMapping("/tags/{id}")
+    public ResponseEntity<ResultResponse> editTag(@PathVariable Long id, @RequestBody TagRequest tagRequest) {
+        Tag updatedTag = boardService.editTag(boardService.findTagById(id).orElseThrow(), tagRequest);
+        return ResponseEntity.ok(new ResultResponse(new TagResponse(updatedTag)));
+    }
+
+    @DeleteMapping("/tags/{id}")
+    public ResponseEntity<ResultResponse> deleteTag(@PathVariable Long id) {
+        ResponseEntity<ResultResponse> result = null;
+        try {
+            boardService.deleteTag(id);
+            result = ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            log.info("delete Tag FAIL");
+            result = FAIL_RESPONSE;
+        }
+
         return result;
     }
 }

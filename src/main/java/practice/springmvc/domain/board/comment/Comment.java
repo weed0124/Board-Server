@@ -25,7 +25,6 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
-    @ToString.Exclude
     private Board board;
 
     @Lob
@@ -33,7 +32,6 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_COMMENT_ID", updatable = false)
-    @ToString.Exclude
     @JsonIgnore
     private Comment parent;
 
