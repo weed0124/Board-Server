@@ -107,7 +107,7 @@ public class BoardApiController {
     @LoginCheck
     @GetMapping
     public ResponseEntity<PagedModel<EntityModel<BoardDTO>>> listBoard(@RequestBody BoardSearchCond cond, @PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
-        Page<BoardDTO> boardList = boardService.findPagingAllV2(cond, pageable);
+        Page<BoardDTO> boardList = boardService.findPagingAll(cond, pageable);
 
         PagedModel<EntityModel<BoardDTO>> entityModels = PagedModelUtil.getEntityModels(assembler,
                 boardList,

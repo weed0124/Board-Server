@@ -25,7 +25,6 @@ import practice.springmvc.dto.request.CommentRequest;
 import practice.springmvc.dto.request.TagRequest;
 import practice.springmvc.exception.BoardNotFoundException;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -60,13 +59,8 @@ public class BoardService {
         return boardRepository.findBoardList(cond);
     }
 
-    @Cacheable(value = "findPagingAllV2", key = "'findPagingAllV2' + #cond.getTitle()")
     @Trace
-    public Page<BoardDTO> findPagingAllV2(BoardSearchCond cond, Pageable pageable) {
-        return boardRepository.findPagingBoardList(cond, pageable);
-    }
-
-    @Trace
+    @Cacheable(value = "findPagingAll", key = "'findPagingAll' + #cond.getTitle()")
     public PageCustom<BoardDTO> findPagingAll(BoardSearchCond cond, Pageable pageable) {
         Page<BoardDTO> page = boardRepository.findPagingBoardList(cond, pageable);
         return new PageCustom<BoardDTO>(page.getContent(), page.getPageable(), page.getTotalElements());

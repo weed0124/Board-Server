@@ -4,8 +4,14 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
-public class PageableCustom {
+public class PageableCustom implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -7047555937637362870L;
+
     private int page;
     private int size;
     private boolean hasNext;

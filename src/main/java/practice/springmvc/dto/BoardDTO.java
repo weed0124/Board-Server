@@ -5,12 +5,16 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -6658441209119625497L;
+
     private Long id;
     private String title;
     private String content;

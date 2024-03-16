@@ -18,7 +18,6 @@ import practice.springmvc.domain.board.BoardSearchCond;
 import practice.springmvc.domain.board.BoardService;
 import practice.springmvc.domain.board.comment.Comment;
 import practice.springmvc.dto.BoardDTO;
-import practice.springmvc.utils.SHA256Util;
 import practice.springmvc.web.board.form.BoardSaveForm;
 import practice.springmvc.web.board.form.BoardUpdateForm;
 
@@ -39,6 +38,7 @@ public class BoardController {
     @GetMapping
     public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model, @PageableDefault(size = 50) Pageable pageable) {
         PageCustom<BoardDTO> boardList = boardService.findPagingAll(boardSearch, pageable);
+
         PageableCustom page = boardList.getPageableCustom();
 
         model.addAttribute("page", page.getPage());
