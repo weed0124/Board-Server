@@ -67,6 +67,13 @@ public class BoardService {
     }
 
     @Trace
+    @Cacheable(value = "findPagingAllByTagName", key = "'findPagingAllByTagName' + #tagName")
+    public PageCustom<BoardDTO> findPagingAllByTagName(String tagName, Pageable pageable) {
+        Page<BoardDTO> page = boardRepository.findPagingBoardListByTagName(tagName, pageable);
+        return new PageCustom<BoardDTO>(page.getContent(), page.getPageable(), page.getTotalElements());
+    }
+
+    @Trace
     public void update(Long boardId, Board updateParam) {
         Board findBoard = findById(boardId).orElseThrow();
         findBoard.setTitle(updateParam.getTitle());

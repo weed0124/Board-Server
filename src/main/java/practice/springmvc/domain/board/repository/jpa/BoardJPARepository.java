@@ -12,4 +12,6 @@ public interface BoardJPARepository {
     List<Board> findBoardList(BoardSearchCond cond);
 
     Page<BoardDTO> findPagingBoardList(BoardSearchCond cond, Pageable pageable);
+
+    Page<BoardDTO> findPagingBoardListByTagName(String tagName, Pageable pageable);
 }

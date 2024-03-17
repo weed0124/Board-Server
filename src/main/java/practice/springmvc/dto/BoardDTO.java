@@ -24,6 +24,8 @@ public class BoardDTO implements Serializable {
     private int readCount;
     private int recommendCount;
     private int notRecommendCount;
+    private String tagName;
+    private String url;
 
     @QueryProjection
     public BoardDTO(Long id, String title, String nickname, String ip, LocalDateTime createdDate, int readCount) {
@@ -57,5 +59,19 @@ public class BoardDTO implements Serializable {
         this.readCount = readCount;
         this.recommendCount = recommendCount;
         this.notRecommendCount = notRecommendCount;
+    }
+
+    @QueryProjection
+    public BoardDTO(Long id, String title, String nickname, String ip, LocalDateTime createdDate, int readCount, int recommendCount, int notRecommendCount, String tagName, String url) {
+        this.id = id;
+        this.title = title;
+        this.nickname = nickname;
+        this.ip = ip;
+        this.createdDate = createdDate;
+        this.readCount = readCount;
+        this.recommendCount = recommendCount;
+        this.notRecommendCount = notRecommendCount;
+        this.tagName = tagName;
+        this.url = url;
     }
 }

@@ -117,6 +117,18 @@ public class BoardApiController {
     }
 
     @LoginCheck
+    @GetMapping("/tags")
+    public ResponseEntity<PagedModel<EntityModel<BoardDTO>>> listBoardByTagName(String tagName, @PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
+        Page<BoardDTO> boardList = boardService.findPagingAllByTagName(tagName, pageable);
+
+        PagedModel<EntityModel<BoardDTO>> entityModels = PagedModelUtil.getEntityModels(assembler,
+                boardList,
+                linkTo(methodOn(this.getClass()).listBoardByTagName(tagName, null, request)),
+                BoardDTO::getId);
+        return ResponseEntity.ok().body(entityModels);
+    }
+
+    @LoginCheck
     @GetMapping("{id}")
     public ResponseEntity<EntityModel<ResultResponse>> readBoard(@PathVariable Long id, HttpServletRequest request) {
         EntityModel<ResultResponse> entityModel = EntityModel.of(new ResultResponse<>(new BoardApiDTO(boardService.findById(id).orElseThrow())));
