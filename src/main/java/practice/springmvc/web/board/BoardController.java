@@ -36,7 +36,7 @@ public class BoardController {
     private final MessageSource ms;
 
     @GetMapping
-    public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model, @PageableDefault(size = 50) Pageable pageable) {
+    public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model, @PageableDefault(size = 10) Pageable pageable) {
         PageCustom<BoardDTO> boardList = boardService.findPagingAll(boardSearch, pageable);
 
         PageableCustom page = boardList.getPageableCustom();
