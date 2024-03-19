@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest(classes = BoardRepositoryTest.class)
+@SpringBootTest
 @Transactional
 class BoardRepositoryTest {
 
@@ -52,9 +52,9 @@ class BoardRepositoryTest {
         test("board1", null, board1);
         test("board2", null, board2);
 
-        test(null, "JUNIT4", board1, board2);
+        test(null, "JUNIT", board1, board2);
 
-        test("board1", "JUNIT5", board1);
+        test("board1", "JUNIT4", board1);
     }
 
     void test(String title, String nickname, Board... boards) {

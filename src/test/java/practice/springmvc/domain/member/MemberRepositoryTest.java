@@ -11,7 +11,7 @@ import practice.springmvc.domain.member.repository.memory.MemoryMemberRepository
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest(classes = MemberRepositoryTest.class)
+@SpringBootTest
 @Transactional
 class MemberRepositoryTest {
 
