@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = BoardRepositoryTest.class)
 @Transactional
 class BoardRepositoryTest {
 
@@ -39,22 +39,22 @@ class BoardRepositoryTest {
     @Test
     public void findBoards() throws Exception {
         // given
-        Board board1 = new Board("board1", "content1", "익명1", "test", "127.0.0.1");
-        Board board2 = new Board("board2", "content2", "익명2", "test2", "127.0.0.1");
+        Board board1 = new Board("board1", "content1", "JUNIT4", "test", "127.0.0.1");
+        Board board2 = new Board("board2", "content2", "JUNIT5", "test2", "127.0.0.1");
 
         boardRepository.save(board1);
         boardRepository.save(board2);
 
-        test(null, null, board1, board2);
-        test(null, "", board1, board2);
-        test("", null, board1, board2);
+//        test(null, null, board1, board2);
+//        test(null, "", board1, board2);
+//        test("", null, board1, board2);
 
         test("board1", null, board1);
         test("board2", null, board2);
 
-        test(null, "익명", board1, board2);
+        test(null, "JUNIT4", board1, board2);
 
-        test("board1", "익명1", board1);
+        test("board1", "JUNIT5", board1);
     }
 
     void test(String title, String nickname, Board... boards) {

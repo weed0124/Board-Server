@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = BoardServiceTest.class)
 @Transactional
 class BoardServiceTest {
     @Autowired
