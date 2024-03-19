@@ -11,7 +11,7 @@
 
 ---
 ### 개발환경
-- Java 17, SpringBoot v3.1.5, JPA, QueryDSL, JUnit5, MySQL, Redis, Docker, AWS EC2, Locust
+- Java 17, SpringBoot v3.1.5, JPA, QueryDSL, JUnit5, MySQL, Redis, Docker, Jenkins, AWS EC2, Locust
 
 ---
 ### 프로그램 주요 기능
