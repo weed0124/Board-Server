@@ -10,6 +10,7 @@ import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver
 import org.springframework.data.web.PagedResourcesAssembler;
 import practice.springmvc.aop.LoginCheckAspect;
 import practice.springmvc.aop.TraceAspect;
+import practice.springmvc.config.RedisConfig;
 import practice.springmvc.config.advice.LogTraceAdvice;
 import practice.springmvc.trace.logtrace.LogTrace;
 import practice.springmvc.trace.logtrace.ThreadLocalTrace;
@@ -19,7 +20,7 @@ import practice.springmvc.trace.logtrace.ThreadLocalTrace;
 //@Import(SpringDataJpaConfig.class)
 //@Import(DynamicProxyConfig.class)
 //@Import(ProxyFactoryConfig.class)
-@Import({TraceAspect.class, LoginCheckAspect.class})
+@Import({TraceAspect.class, LoginCheckAspect.class, RedisConfig.class})
 @EnableJpaAuditing
 @EnableCaching
 @SpringBootApplication(scanBasePackages = {"practice.springmvc.domain", "practice.springmvc.web", "practice.springmvc.annotation", "practice.springmvc.aop"})
